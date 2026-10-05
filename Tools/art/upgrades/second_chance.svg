@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+<defs>
+  <radialGradient id="plate" cx="50%" cy="42%" r="62%">
+    <stop offset="0%" stop-color="#3a2d33"/>
+    <stop offset="100%" stop-color="#1d171c"/>
+  </radialGradient>
+  <radialGradient id="glowC" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#9bf3ea" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#9bf3ea" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glowA" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffc56b" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#ffc56b" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#e8e0d4"/>
+    <stop offset="55%" stop-color="#a8a094"/>
+    <stop offset="100%" stop-color="#5f5852"/>
+  </linearGradient>
+  <linearGradient id="pebble" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c3cbb8"/>
+    <stop offset="100%" stop-color="#6f7c70"/>
+  </linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e2c79b"/>
+    <stop offset="100%" stop-color="#9c7a5a"/>
+  </linearGradient>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ffe1a0"/>
+    <stop offset="100%" stop-color="#a87632"/>
+  </linearGradient>
+  <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#f6ead2"/>
+    <stop offset="100%" stop-color="#d9c6a2"/>
+  </linearGradient>
+</defs>
+
+<polygon points="256,14 466,135 466,377 256,498 46,377 46,135" fill="url(#plate)" stroke="#dcb573" stroke-width="6"/>
+<polygon points="256,38 445,147 445,365 256,474 67,365 67,147" fill="none" stroke="#9c7440" stroke-width="2.5" stroke-opacity="0.8"/>
+
+<g>
+  <path d="M120,200 L380,150 L404,368 L146,420 Z" fill="url(#paper)" stroke="#f3e6cf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M262,174 L276,394" stroke="#a88d63" stroke-width="3"/>
+  <path d="M150,222 L388,192" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,248 L388,218" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,274 L388,244" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,300 L388,270" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,326 L388,296" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,352 L388,322" stroke="#b9a37c" stroke-width="2" opacity="0.6"/><path d="M150,378 L388,348" stroke="#b9a37c" stroke-width="2" opacity="0.6"/>
+</g>
+<g transform="translate(262,288) rotate(-38)">
+  <path d="M0,-170 C60,-120 64,40 8,150 C-50,40 -56,-110 0,-170 Z" fill="#eef7f4" stroke="#9bf3ea" stroke-width="4"/>
+  <path d="M2,-160 L4,176" stroke="#9c7440" stroke-width="5" stroke-linecap="round"/>
+  <path d="M4,-110 L40,-130 M4,-70 L46,-92 M4,-30 L48,-50 M4,10 L44,-8 M4,50 L36,34 M4,-110 L-34,-128 M4,-70 L-42,-90 M4,-30 L-44,-48 M4,10 L-40,-6 M4,50 L-32,36" stroke="#9bf3ea" stroke-width="3" opacity="0.8"/>
+</g>
+<path d="M380,120 A64,64 0 1 1 312,82" fill="none" stroke="#dcb573" stroke-width="7" stroke-linecap="round"/>
+<path d="M312,82 l30,-14 M312,82 l18,26" stroke="#dcb573" stroke-width="7" stroke-linecap="round"/>
+
+</svg>

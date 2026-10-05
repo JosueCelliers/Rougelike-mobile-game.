@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+<defs>
+  <radialGradient id="plate" cx="50%" cy="42%" r="62%">
+    <stop offset="0%" stop-color="#3a2d33"/>
+    <stop offset="100%" stop-color="#1d171c"/>
+  </radialGradient>
+  <radialGradient id="glowC" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#9bf3ea" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#9bf3ea" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glowA" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffc56b" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#ffc56b" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#e8e0d4"/>
+    <stop offset="55%" stop-color="#a8a094"/>
+    <stop offset="100%" stop-color="#5f5852"/>
+  </linearGradient>
+  <linearGradient id="pebble" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c3cbb8"/>
+    <stop offset="100%" stop-color="#6f7c70"/>
+  </linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e2c79b"/>
+    <stop offset="100%" stop-color="#9c7a5a"/>
+  </linearGradient>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ffe1a0"/>
+    <stop offset="100%" stop-color="#a87632"/>
+  </linearGradient>
+  <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#f6ead2"/>
+    <stop offset="100%" stop-color="#d9c6a2"/>
+  </linearGradient>
+</defs>
+
+<polygon points="256,14 466,135 466,377 256,498 46,377 46,135" fill="url(#plate)" stroke="#dcb573" stroke-width="6"/>
+<polygon points="256,38 445,147 445,365 256,474 67,365 67,147" fill="none" stroke="#9c7440" stroke-width="2.5" stroke-opacity="0.8"/>
+
+<path d="M96,404 Q88.5,334.0 81,264 Q96.5,334.0 110,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M118,404 Q117.0,315.5 116,227 Q125.0,315.5 132,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M140,404 Q145.5,332.0 151,260 Q153.5,332.0 154,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M162,404 Q159.0,313.5 156,223 Q167.0,313.5 176,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M184,404 Q187.5,330.0 191,256 Q195.5,330.0 198,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M206,404 Q201.0,330.0 196,256 Q209.0,330.0 220,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M228,404 Q229.5,328.0 231,252 Q237.5,328.0 242,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M250,404 Q243.0,330.0 236,256 Q251.0,330.0 264,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M272,404 Q271.5,330.0 271,256 Q279.5,330.0 286,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M294,404 Q300.0,330.0 306,256 Q308.0,330.0 308,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M316,404 Q313.5,330.0 311,256 Q321.5,330.0 330,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M338,404 Q342.0,330.0 346,256 Q350.0,330.0 352,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M360,404 Q355.5,322.0 351,240 Q363.5,322.0 374,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M382,404 Q384.0,303.5 386,203 Q392.0,303.5 396,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/><path d="M404,404 Q397.5,320.0 391,236 Q405.5,320.0 418,404 Z" fill="#9aa349" stroke="#3e4520" stroke-width="2"/><path d="M426,404 Q426.0,301.5 426,199 Q434.0,301.5 440,404 Z" fill="#6f7a33" stroke="#3e4520" stroke-width="2"/>
+<path d="M212,214 l10,-16 l6,4 z" fill="#9aa349" stroke="#3e4520" stroke-width="1.5"/><path d="M262,196 l10,-16 l6,4 z" fill="#9aa349" stroke="#3e4520" stroke-width="1.5"/><path d="M318,208 l10,-16 l6,4 z" fill="#9aa349" stroke="#3e4520" stroke-width="1.5"/><path d="M350,186 l10,-16 l6,4 z" fill="#9aa349" stroke="#3e4520" stroke-width="1.5"/>
+<g transform="translate(256,232) rotate(-8)">
+  <path d="M-170,6 Q-20,-56 168,-18 Q178,-12 168,0 Q-10,-20 -168,30 Z" fill="url(#steel)" stroke="#f3e6cf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M-150,10 Q-10,-38 150,-12" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.7"/>
+  <rect x="-200" y="4" width="46" height="26" rx="6" fill="#2a2128" stroke="#dcb573" stroke-width="3"/>
+</g>
+<path d="M96,404 L432,404" stroke="#3e4520" stroke-width="4"/>
+
+</svg>

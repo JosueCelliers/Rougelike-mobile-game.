@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22460092417d8237c8718777741482e4, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: BadLie.Game::BadLie.Game.GameConfig
+  Terrain: {fileID: 2100000, guid: 3ec46fbd63c0bb661b03e47475a9cbe7, type: 2}
+  Water: {fileID: 2100000, guid: b8083e5ae788f98ce808bb15015731e8, type: 2}
+  LowerWater: {fileID: 2100000, guid: 6f79f9029dc6781a5af287f24247f34b, type: 2}
+  Lit: {fileID: 2100000, guid: 64aa491bb1c9d938cbc3e0f8f3de0839, type: 2}
+  Foliage: {fileID: 2100000, guid: 28e4a809d05e2172d9e52336d27c5881, type: 2}
+  Glow: {fileID: 2100000, guid: d58bc47c7251673bebf1a7e49d62f8c2, type: 2}
+  GlowAmber: {fileID: 2100000, guid: 230c1d9c7de517e67b4275c9d382d896, type: 2}
+  Ball: {fileID: 2100000, guid: f13d69bd3095037ce8006ef33c2b30d6, type: 2}
+  FxAlpha: {fileID: 2100000, guid: 87275d695025440bcbc69eeb71189175, type: 2}
+  FxAdditive: {fileID: 2100000, guid: 179e43740a272d84f8cdcb053a80c09e, type: 2}
+  AimLine: {fileID: 2100000, guid: 0ee16ee577a3cd4dab886b17f01ad0ae, type: 2}
+  Shadow: {fileID: 2100000, guid: f77870ae25b750543bd864508b7ccd08, type: 2}
+  Noise: {fileID: 2800000, guid: 8a15f205797926a858eb99e1cf6abaeb, type: 3}
+  Setts: {fileID: 2800000, guid: 5d822eb89528f494da15d8f78f9ee2b3, type: 3}
+  SoftDot: {fileID: 2800000, guid: 7613fa01f91cfcfdf985800935c2e37a, type: 3}
+  Ring: {fileID: 2800000, guid: d2d3aff3c84d805cda30b72fea87be85, type: 3}
+  Leaf: {fileID: 0}
+  Panel: {fileID: 11400000, guid: e6b4c186f3b157f9a86efd465f5a9b04, type: 2}
+  Style: {fileID: 7433441132597879392, guid: a5945c436ed93cbc6b6a8e3210158edd, type: 3}
+  TitleFont: {fileID: 12800000, guid: 9f1b6779a8f80422083075a75d72ecd6, type: 3}
+  BodyFont: {fileID: 12800000, guid: 5417a761ac04abbe4b5c2dc44e1da4f7, type: 3}
+  UpgradeArt:
+  - {fileID: 2800000, guid: bec1282db6a134d6ba440fdd8d717c01, type: 3}
+  - {fileID: 2800000, guid: bfb070cc9ca0d67d4ad6ac67c7957170, type: 3}
+  - {fileID: 2800000, guid: 1c2f99182c8167917ad9471be5186341, type: 3}
+  - {fileID: 2800000, guid: eb9ec6ff54c3859a78e88bf5c50e13bb, type: 3}
+  - {fileID: 2800000, guid: 95e69d9fdc10df84684427bf6b9cd6ef, type: 3}
+  - {fileID: 2800000, guid: 9761957a80ab99222b5f2b3e71878c06, type: 3}
+  UpgradeIcons:
+  - {fileID: 2800000, guid: f643062da0cf587ad872908f3869850d, type: 3}
+  - {fileID: 2800000, guid: 6b2dbb3fa45bf3c44a05bb966183ad4d, type: 3}
+  - {fileID: 2800000, guid: 3e6777a5765ce63f881e4e6eb30b8764, type: 3}
+  - {fileID: 2800000, guid: d9fc8832db56a5b47a41f00dafd3804e, type: 3}
+  - {fileID: 2800000, guid: 48bd4fcceb857ac68917e9504682e259, type: 3}
+  - {fileID: 2800000, guid: 9a04d4f02b2fbe0e8b094849fba4fa7b, type: 3}
+  Strike:
+  - {fileID: 8300000, guid: 78ab45d9c2460ba5f8d876d0a23ee831, type: 3}
+  - {fileID: 8300000, guid: ef65fa14fe69493679ad051d1101776a, type: 3}
+  - {fileID: 8300000, guid: 69e779225f976d19cb6d3ccaca0e558d, type: 3}
+  WallStone:
+  - {fileID: 8300000, guid: abde71dc4f149290f85bce1aa4fc32f0, type: 3}
+  - {fileID: 8300000, guid: 9298b2d79914e4e329bcacafe92128be, type: 3}
+  WallHedge: {fileID: 8300000, guid: 83ece20e3a7574ef688ab25f7f7bedb5, type: 3}
+  CupDrop: {fileID: 8300000, guid: f41bba0b7ee3cf375a75b982b77f385c, type: 3}
+  Splash: {fileID: 8300000, guid: 61c6d4970c1fc7456a5a700094988a03, type: 3}
+  Skip: {fileID: 8300000, guid: d4f634861760f255891b1a95c13570a0, type: 3}
+  LandGrass: {fileID: 8300000, guid: fc153c2c515c268c3988332a5b668b20, type: 3}
+  LandSand: {fileID: 8300000, guid: 4020d2ad93e39b40da950fa380d1cbbf, type: 3}
+  LipOut: {fileID: 8300000, guid: 95d133940baa6b48ab2b73c39ecb8772, type: 3}
+  UiTap: {fileID: 8300000, guid: fe0830b3c6294ea3aa7deddfeca2d07c, type: 3}
+  UiSelect: {fileID: 8300000, guid: e53e63b20137e72f5a79043c45ba3b7a, type: 3}
+  Penalty: {fileID: 8300000, guid: 1ccb8e229fd6d0f9f8eb5b3ed357d440, type: 3}
+  HoleComplete: {fileID: 8300000, guid: d470f4825af06dab5a7440841b956e29, type: 3}
+  RunWon: {fileID: 8300000, guid: 15a7b23f10d39b4f3b7abb1dcec7210c, type: 3}
+  RunLost: {fileID: 8300000, guid: 1cfc42369f402b796839fb9d191f436b, type: 3}
+  Magnet: {fileID: 8300000, guid: a84b076fed362a7c2bfb5864fbcd8f4a, type: 3}
+  Ambience: {fileID: 8300000, guid: b672749d0bd89ff06ab61605d58b7305, type: 3}
+  Music: {fileID: 8300000, guid: e48ff57d8edc733039c92286c48ad5a0, type: 3}

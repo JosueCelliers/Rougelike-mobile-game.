@@ -1,0 +1,325 @@
+/* BAD LIE interface. Restrained: dark ink plates, thin gold rules, ivory type. */
+
+.layer {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.safe {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.plate {
+    background-color: rgba(26, 20, 25, 0.84);
+    border-color: rgba(220, 181, 115, 0.55);
+    border-width: 2px;
+    border-radius: 6px;
+    padding: 28px 36px;
+}
+
+.title {
+    color: rgb(245, 233, 210);
+    font-size: 60px;
+    letter-spacing: 9px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.title-small {
+    color: rgb(245, 233, 210);
+    font-size: 40px;
+    letter-spacing: 6px;
+    -unity-text-align: middle-left;
+}
+
+.kicker {
+    color: rgb(220, 181, 115);
+    font-size: 32px;
+    letter-spacing: 8px;
+    -unity-text-align: middle-center;
+}
+
+.body {
+    color: rgb(245, 233, 210);
+    font-size: 40px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.body-left {
+    color: rgb(245, 233, 210);
+    font-size: 38px;
+    white-space: normal;
+    -unity-text-align: upper-left;
+}
+
+.dim {
+    color: rgba(245, 233, 210, 0.66);
+}
+
+.accent {
+    color: rgb(156, 243, 234);
+}
+
+.warn {
+    color: rgb(240, 110, 82);
+}
+
+.rule {
+    height: 2px;
+    background-color: rgba(220, 181, 115, 0.5);
+    margin: 18px 40px;
+}
+
+.btn {
+    min-height: 140px;
+    min-width: 140px;
+    background-color: rgba(26, 20, 25, 0.86);
+    border-color: rgba(220, 181, 115, 0.7);
+    border-width: 2px;
+    border-radius: 70px;
+    color: rgb(245, 233, 210);
+    font-size: 40px;
+    letter-spacing: 6px;
+    -unity-text-align: middle-center;
+    padding: 0 48px;
+    margin: 12px;
+    transition-property: scale, background-color;
+    transition-duration: 0.12s;
+}
+
+.btn:hover {
+    background-color: rgba(48, 36, 42, 0.92);
+}
+
+.btn:active {
+    scale: 0.96 0.96;
+    background-color: rgba(70, 52, 50, 0.95);
+}
+
+.btn-primary {
+    background-color: rgba(176, 128, 62, 0.92);
+    border-color: rgb(245, 214, 150);
+    color: rgb(26, 18, 18);
+}
+
+.btn-primary:hover {
+    background-color: rgba(196, 146, 72, 0.95);
+}
+
+.btn-round {
+    width: 140px;
+    height: 140px;
+    border-radius: 70px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.hud-top {
+    position: absolute;
+    left: 28px; right: 28px; top: 20px;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.hud-cluster {
+    background-color: rgba(26, 20, 25, 0.74);
+    border-color: rgba(220, 181, 115, 0.45);
+    border-width: 2px;
+    border-radius: 6px;
+    padding: 16px 22px 18px 22px;
+}
+
+.hud-hole {
+    color: rgb(220, 181, 115);
+    font-size: 30px;
+    letter-spacing: 6px;
+}
+
+.hud-name {
+    color: rgb(245, 233, 210);
+    font-size: 36px;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+}
+
+.hud-strokes-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.hud-strokes-num {
+    color: rgb(245, 233, 210);
+    font-size: 54px;
+    margin-left: 16px;
+    -unity-text-align: middle-left;
+}
+
+.hud-strokes-label {
+    color: rgba(245, 233, 210, 0.7);
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin-left: 10px;
+    -unity-text-align: middle-left;
+}
+
+.hud-sub {
+    color: rgba(245, 233, 210, 0.75);
+    font-size: 30px;
+    margin-top: 4px;
+}
+
+.hud-upgrades {
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.hud-bottom {
+    position: absolute;
+    left: 36px; right: 36px; bottom: 36px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.toast {
+    position: absolute;
+    left: 60px; right: 60px; top: 360px;
+    align-items: center;
+    opacity: 0;
+    transition-property: opacity, translate;
+    transition-duration: 0.35s;
+    translate: 0 -20px;
+}
+
+.toast.show {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.center {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.dim-bg {
+    background-color: rgba(18, 12, 16, 0.55);
+}
+
+.card {
+    width: 900px;
+    align-items: stretch;
+}
+
+.upgrade-card {
+    flex-direction: row;
+    background-color: rgba(26, 20, 25, 0.9);
+    border-color: rgba(220, 181, 115, 0.45);
+    border-width: 2px;
+    border-radius: 8px;
+    padding: 22px;
+    margin: 14px 0;
+    min-height: 300px;
+    transition-property: border-color, scale;
+    transition-duration: 0.15s;
+}
+
+.upgrade-card.selected {
+    border-color: rgb(156, 243, 234);
+    border-width: 4px;
+    scale: 1.02 1.02;
+}
+
+.upgrade-art {
+    width: 240px;
+    height: 240px;
+    margin-right: 26px;
+    -unity-background-scale-mode: scale-to-fit;
+    flex-shrink: 0;
+}
+
+.upgrade-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.upgrade-name {
+    color: rgb(245, 233, 210);
+    font-size: 42px;
+    letter-spacing: 5px;
+    margin-bottom: 8px;
+}
+
+.upgrade-effect {
+    color: rgb(245, 233, 210);
+    font-size: 32px;
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.upgrade-trade {
+    color: rgb(240, 160, 120);
+    font-size: 30px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.upgrade-use {
+    color: rgb(156, 243, 234);
+    font-size: 30px;
+    white-space: normal;
+}
+
+.combo {
+    color: rgb(255, 197, 107);
+    font-size: 30px;
+    white-space: normal;
+    margin-top: 6px;
+}
+
+.score-row {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom-width: 1px;
+    border-color: rgba(220, 181, 115, 0.25);
+}
+
+.score-cell {
+    color: rgb(245, 233, 210);
+    font-size: 32px;
+}
+
+.logo {
+    color: rgb(245, 233, 210);
+    font-size: 150px;
+    letter-spacing: 26px;
+    -unity-text-align: middle-center;
+}
+
+.setting-row {
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.setting-label {
+    color: rgb(245, 233, 210);
+    font-size: 36px;
+    width: 230px;
+    letter-spacing: 3px;
+}
+
+.hint {
+    position: absolute;
+    color: rgb(245, 233, 210);
+    font-size: 32px;
+    -unity-text-align: middle-center;
+    width: 520px;
+    margin-left: -260px;
+}
