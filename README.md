@@ -35,8 +35,18 @@ The mouse works like a finger. Drag back from anywhere to aim and release to sho
 Right-click or Esc cancels a shot, and the scroll wheel zooms in survey mode.
 
 ### Install on an Android phone
+A test APK was built headless in this environment: `Builds/Android/BADLIE.apk`, 32.8 MB.
+- It is IL2CPP, ARM64, targets Android 16 (API 36) with a minimum of Android 8, and is
+  signed with the Unity debug key. `apksigner verify` passes.
+- It is not committed to git (`Builds/` is ignored); it was delivered alongside this branch.
+- Install it with `adb install -r BADLIE.apk`, or copy it to the phone and allow installs
+  from unknown sources.
+- It has **not** been run on a device yet.
+
+To build it yourself:
 1. In Unity, **File ▸ Build Profiles ▸ Android ▸ Switch Platform**. This needs the Android
-   Build Support module with its SDK, NDK and OpenJDK.
+   Build Support module with its SDK, NDK and OpenJDK. On a headless Linux editor,
+   `Tools/unity/install_android.sh` installs all of it.
 2. Run **BAD LIE ▸ Build ▸ Android APK**, or **Build And Run** with the phone connected over
    USB with USB debugging on. The output is `Builds/Android/BADLIE.apk`, which you can install
    with `adb install -r Builds/Android/BADLIE.apk`.
@@ -69,13 +79,36 @@ locally on the device.
   run exactly. A shot that was still rolling when the app closed is re-simulated
   deterministically, so it ends where it would have.
 
+## Screenshots
+
+These are real frames from the game running in a Linux player build at 1080×2340 (a common
+phone resolution), driven by scripted touch input. Holes are played by the shot-planner bot
+through the same aim and shot path as a finger. None of them are renders.
+
+| | | | |
+|---|---|---|---|
+| ![Title](Docs/Screenshots/final/F01_title.jpg) | ![Hole card](Docs/Screenshots/final/F02_hole_intro.jpg) | ![Aiming](Docs/Screenshots/final/F04_aiming.jpg) | ![Upgrade choice](Docs/Screenshots/final/F08_upgrade_choice.jpg) |
+| Title | Hole card | Aiming: power ring and true preview | Choose 1 of 3 |
+| ![Sluice Walk](Docs/Screenshots/final/A3_approach.jpg) | ![Flooded Cloister](Docs/Screenshots/final/A4_tee.jpg) | ![Orrery](Docs/Screenshots/final/A5_approach.jpg) | ![Run lost](Docs/Screenshots/final/F11_run_lost.jpg) |
+| The Sluice Walk | The Flooded Cloister | The Orrery | The exact failure verdict* |
+
+All frames are in [`Docs/Screenshots/final`](Docs/Screenshots/final):
+- The full loop, F01–F11, including cancel, survey, settings, the ball rolling, hole complete
+  and resume.
+- The tee and approach of every hole, A1–A5.
+- Skip Stone, Bank Shot and Cup Magnet caught mid-shot, X1–X3.
+- A safe-area check with a simulated notch and gesture bar.
+
+\*The failure frame was produced by the capture script setting the budget to one stroke and
+playing a deliberate miss, to show the verdict screen without playing a whole losing run.
+
 ## Run rules
 
 | Rule | Value |
 |---|---|
 | Holes per run | 5 (par 4, 3, 4, 4, 5: 20 in total) |
-| Starting strokes | **STARTSTROKES** |
-| Restored on holing out | **+RESTORE**, plus **+1** for finishing under par |
+| Starting strokes | **11** |
+| Restored on holing out | **+3**, plus **+1** for finishing under par |
 | Water or out of bounds | +1 penalty stroke; the ball returns to its last lie |
 | Upgrades | after holes 1–4, choose 1 of 3 (no duplicates) |
 | Run lost | when you have no strokes left and the ball is not in the cup |
@@ -130,6 +163,8 @@ Ball physics has no random element at all.
 - **Bot playtests:** thousands of simulated shots over every hole, pin and loadout at three
   skill levels, and whole runs through the real rules. The stroke budget was tuned from
   these, see [`Docs/Tuning.md`](Docs/Tuning.md).
+- **The Android APK builds:** IL2CPP, ARM64, signature verified. It has not been run on a
+  device.
 - **Scripted play in a Linux player build at 1080×2340** with injected touch input. This
   produced the screenshots in [`Docs/Screenshots/final`](Docs/Screenshots/final):
   - The full loop: title, hole card, HUD, aiming, cancel, the ball rolling, hole out,

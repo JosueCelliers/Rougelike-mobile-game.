@@ -114,7 +114,60 @@ the matching `*_runs.csv` files.
 
 ## 5. Pass 2 and the stroke budget
 
-PASS2_PLACEHOLDER
+The same tool was run again after the changes: the precise bot with every loadout, and the
+noisy bots with no upgrades. Full report: `Docs/Playtest/pass2_report.md`.
+
+Mean strokes with no upgrades, over every pin. "(n×)" means n plays failed to hole out
+within 14 strokes; these stuck plays inflate the mean.
+
+| Hole | Par | Precise | Good: pass 1 → 2 | Casual: pass 1 → 2 |
+|---|---|---|---|---|
+| 1 The Lantern Gate | 4 | 4 | 4.89 → 4.89 | 6.50 (2×) → 6.50 (2×) |
+| 2 The Sunken Parterre | 4 → **3** | 3 | 3.22 → 4.44 (1×) | 3.58 → 3.58 |
+| 3 The Sluice Walk | 4 | 4 | 4.33 → 4.33 | 5.08 → 5.08 |
+| 4 The Flooded Cloister | 4 | 4–5 → 4 | 8.44 (2×) → **5.33** (1×) | 8.25 (2×) → **4.58** |
+| 5 The Orrery | 5 | 3–4 | 5.44 → 7.22 (2×) | 7.83 (2×) → 7.58 (3×) |
+
+Notes on the table:
+- **Holes 1 and 3 did not change,** and their numbers match pass 1 exactly. Same seeds give
+  the same shots: a determinism check that came for free.
+- **Hole 4 now plays like a par 4.** Water penalties per good-bot play fell from 1.4 to 0.6.
+- **Hole 2's good-bot mean** includes one stuck play. The apron ramp was made steeper in the
+  visual pass to remove a seam, and a slightly short putt now rolls back down it. A greedy bot
+  repeats that putt; a person adjusts.
+- **The Orrery is the run's hardest hole for imprecise play.** Its skip gap faces the
+  natural line from the ramp. It is the last hole, so the run's tension holds to the end.
+
+Whole runs at the shipped budget (start 11, +3 per hole, +1 under par), pass 1 → pass 2:
+
+| Bot | Mean strokes (par 21 → 20) | Run win rate |
+|---|---|---|
+| precise | 18.3 → 18.3 | 100% → 100% |
+| good | 22.4 → 21.6 | 70% → **75%** |
+| casual | 26.7 → 24.7 | 20% → **40%** |
+
+Budget grid for pass 2 (share of runs that each budget would let through):
+
+| Start \ restore | good: +2 | good: +3 | good: +4 | casual: +2 | casual: +3 | casual: +4 |
+|---|---|---|---|---|---|---|
+| 9 | 3% | 63% | 80% | 0% | 13% | 50% |
+| 11 | 20% | **75%** | 88% | 0% | **40%** | 60% |
+| 13 | 63% | 80% | 90% | 13% | 50% | 78% |
+
+**Decision: keep start 11, +3 per hole and +1 under par.**
+- A precise player always wins, a good player wins about three runs in four, and a casual
+  player about two in five.
+- New players start near casual, so a first win is reachable, and the bar rises with skill
+  rather than luck. There is no randomness in the shots.
+- Restoring +4 would make good play near-certain (88%). Restoring +2 makes even good play a
+  coin toss or worse.
+- Losses cluster on holes 4 and 5, so runs stay tense to the end. A run is not decided at
+  hole 2.
+
+**Run length.** The good bot takes about 22 shots per run. The ball travels for about 3.5 s
+per shot in playback. Adding about 4 s to aim each shot, five hole cards and four upgrade
+choices gives roughly 5–6 minutes per run, inside the 5–10 minute target. This is an
+estimate from bot stroke counts; it has not been timed with people.
 
 ## 6. Scene cost per hole (desktop measurement)
 
