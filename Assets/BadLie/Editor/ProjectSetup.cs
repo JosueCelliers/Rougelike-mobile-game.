@@ -59,6 +59,8 @@ namespace BadLie.EditorTools
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
+            // Full generic sharing: same behaviour, a markedly smaller libil2cpp.so (APK under 30 MB).
+            PlayerSettings.SetIl2CppCodeGeneration(UnityEditor.Build.NamedBuildTarget.Android, UnityEditor.Build.Il2CppCodeGeneration.OptimizeSize);
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.Android, new[] { GraphicsDeviceType.Vulkan, GraphicsDeviceType.OpenGLES3 });
             PlayerSettings.Android.renderOutsideSafeArea = true;

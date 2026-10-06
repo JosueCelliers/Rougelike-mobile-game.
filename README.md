@@ -35,9 +35,9 @@ The mouse works like a finger. Drag back from anywhere to aim and release to sho
 Right-click or Esc cancels a shot, and the scroll wheel zooms in survey mode.
 
 ### Install on an Android phone
-A test APK was built headless in this environment: `Builds/Android/BADLIE.apk`, 32.8 MB.
-- It is IL2CPP, ARM64, targets Android 16 (API 36) with a minimum of Android 8, and is
-  signed with the Unity debug key. `apksigner verify` passes.
+A test APK was built headless in this environment: `Builds/Android/BADLIE.apk`, 26.3 MB.
+- It is IL2CPP with size-optimised code generation, ARM64, targets Android 16 (API 36) with
+  a minimum of Android 8, and is signed with the Unity debug key. `apksigner verify` passes.
 - It is not committed to git (`Builds/` is ignored); it was delivered alongside this branch.
 - Install it with `adb install -r BADLIE.apk`, or copy it to the phone and allow installs
   from unknown sources.
