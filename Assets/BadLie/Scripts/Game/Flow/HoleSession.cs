@@ -43,6 +43,7 @@ namespace BadLie.Game
         float previewPower = -1f;
         Vector2 surveyLast;
         bool surveyDragging;
+        float pinchLast = -1f;
 
         public static HoleSession Create(Transform parent, GameConfig cfg, CameraRig rig, CourseModel course)
         {
@@ -166,6 +167,22 @@ namespace BadLie.Game
 
         void UpdateSurvey(PointerFrame f)
         {
+            // Two fingers: pinch to zoom (spreading the fingers zooms in).
+            if (f.TouchCount >= 2)
+            {
+                float d = (f.PrimaryPos - f.SecondaryPos).magnitude;
+                if (pinchLast > 0f && d > 1f) Rig.Zoom(pinchLast / d);
+                pinchLast = d;
+                surveyDragging = false;
+                return;
+            }
+            if (pinchLast > 0f)
+            {
+                // Back to one finger: continue panning from where it is now, without a jump.
+                pinchLast = -1f;
+                surveyDragging = f.PrimaryHeld;
+                surveyLast = f.PrimaryPos;
+            }
             if (f.PrimaryDown && (OverUI == null || !OverUI(f.PrimaryPos)))
             {
                 surveyDragging = true;

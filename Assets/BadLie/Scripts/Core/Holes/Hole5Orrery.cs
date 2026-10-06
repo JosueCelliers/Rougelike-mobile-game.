@@ -30,7 +30,7 @@ namespace BadLie.Holes
             h.AltCups.Add(V(-1.2f, 33.0f));
             h.AltCups.Add(V(1.3f, 32.6f));
             h.Features.Add("Vents bend the ball");
-            h.Features.Add("Moat: skip or take a bridge");
+            h.Features.Add("Moat: take a bridge, or skip the gap");
             h.Features.Add("Meadow shortcut");
 
             Vector2 c = V(0f, 33.5f);
@@ -70,6 +70,12 @@ namespace BadLie.Holes
             // ---------------------------------------------------------------- walls
             var rim = new ArcShape(c, 8.75f, 288f, 612f, 0.15f);
             h.Wall(WallStyle.Machine, 0.32f, 0.3f, rim.SamplePoints(48)).BaseY = 0.5f;
+            // A low coping round the moat, open at both bridges and at the skip gap facing the ramp.
+            foreach (var arc in new[] { new Vector2(57f, 213f), new Vector2(237f, 259f), new Vector2(281f, 393f) })
+            {
+                var coping = new ArcShape(c, 6.13f, arc.x, arc.y, 0.08f);
+                h.Wall(WallStyle.Coping, 0.16f, 0.16f, coping.SamplePoints(Mathf.CeilToInt((arc.y - arc.x) / 6f))).BaseY = 0.5f;
+            }
             h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(-0.25f, 17.3f), V(-0.25f, 19.9f));
             h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(2.25f, 17.3f), V(2.25f, 19.9f));
             h.Wall(WallStyle.Balustrade, 0.95f, 0.34f, V(-2.2f, -3.2f), V(2.2f, -3.2f));
@@ -92,7 +98,7 @@ namespace BadLie.Holes
             Vector2 dir = Geo2D.FromAngle(angle);
             Vector2 inner = centre + dir * 4.5f, outer = centre + dir * 6.4f;
             Vector2 mid = centre + dir * 5.45f;
-            h.Pad(id, new BoxShape(mid, V(2.8f, 1.7f), angle, 0.15f), 8, HeightDef.Ramp(outer, 0.5f, inner, 0.85f), SurfaceType.Stone, EdgeStyle.Coping);
+            h.Pad(id, new BoxShape(mid, V(2.8f, 2.3f), angle, 0.15f), 8, HeightDef.Ramp(outer, 0.5f, inner, 0.85f), SurfaceType.Stone, EdgeStyle.Coping);
         }
     }
 
@@ -134,6 +140,15 @@ namespace BadLie.Holes
             h.PropAt("column", new Vector3(10.4f, -2.1f, 27.6f), 0f, 1.2f);
             h.PropAt("lily_pads", new Vector3(-10.0f, -1.9f, 25.6f), 0f, 1.3f);
             h.PropAt("lily_pads", new Vector3(9.6f, -1.9f, 41.4f), 40f, 1.2f);
+            // Beyond the dais: the drowned end of the machine hall.
+            h.PropAt("sunken_slabs", new Vector3(2.6f, -1.9f, 49.5f), 20f, 1.2f);
+            h.PropAt("ruin_wall", new Vector3(-6.4f, -2.3f, 52.0f), 10f, 1.1f);
+            h.PropAt("column_broken", new Vector3(6.8f, -2.1f, 47.6f), 0f, 1.2f);
+            h.PropAt("column", new Vector3(-1.8f, -2.1f, 56.4f), 0f, 1.25f);
+            h.PropAt("lily_pads", new Vector3(-3.4f, -1.9f, 46.8f), 70f, 1.3f);
+            h.PropAt("lily_pads", new Vector3(8.4f, -1.9f, 54.6f), 10f, 1.1f);
+            h.PropAt("reeds", new Vector3(-8.8f, -1.9f, 45.2f), 0f, 1.1f);
+            h.PropAt("aqueduct_far", new Vector3(0f, -1.9f, 66f), 0f, 1.2f);
             h.Prop("bush_flowers", -5.4f, -5.6f, 0f, 1.1f, 1);
             h.Prop("bush_flowers", 5.6f, -5.4f, 0f, 1.1f, 2);
             h.Prop("urn", -2.6f, -7.4f, 0f, 1f, 1);

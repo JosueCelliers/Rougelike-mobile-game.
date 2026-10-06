@@ -20,7 +20,9 @@ namespace BadLie.Holes
                 Id = "sunken-parterre",
                 Name = "The Sunken Parterre",
                 Subtitle = "Drop into the old parterre. The overgrown beds are the short way.",
-                Par = 4,
+                // Playtests: every bot, even with no upgrades, needs three. The drop off the terrace
+                // carries a long way, so this is the run's par 3.
+                Par = 3,
                 Tee = V(0f, -2.2f),
                 Cup = V(1.4f, 37.3f),
                 CameraYaw = 0f,

@@ -1,4 +1,4 @@
-# Handoff: environment setup notes (from the first session)
+# Handoff: environment setup notes
 
 Read this before installing anything. It records what was verified in the first cloud
 session (2026-10-05), so the next session can skip the dead ends.
@@ -19,6 +19,19 @@ session (2026-10-05), so the next session can skip the dead ends.
 - Modules: `LinuxEditorTargetInstaller/UnitySetup-Android-Support-for-Editor-<ver>.tar.xz`
   returns **404**. The release API lists the Android module as a `.pkg`, which has to be
   extracted with 7z and cpio. iOS, WebGL and Linux IL2CPP have Linux `.tar.xz` modules.
+  **`Tools/unity/install_android.sh` does the whole Android install** (verified in session 2):
+  - It extracts the playback engine from the `.pkg`, skipping the 3.7 GB of Development and
+    Mono variations.
+  - It installs OpenJDK 17, NDK r27c, SDK platforms 35 and 36, build-tools 36,
+    platform-tools, cmdline-tools and CMake at the paths Unity's release API gives.
+  - The install takes about 5.7 GB, and needs about 9 GB free while it runs.
+- Android builds: `Tools/unity/unity.sh build_android -quit -buildTarget Android -executeMethod
+  BadLie.EditorTools.BuildTools.BuildAndroid`.
+  - The first IL2CPP build takes about 20 minutes on 4 cores.
+  - Gradle downloads the Android Gradle Plugin 9.0.0 from `dl.google.com` through the
+    proxy. Once, this failed transiently with "plugin was not found". Running the exported
+    project's Gradle by hand (`Library/Bee/Android/Prj/IL2CPP/Gradle`) worked, and so did
+    the next Unity build.
 
 ## Licensing (the blocker in session 1)
 - A `Unity_lic.ulf` activated on another computer is **rejected** here.
@@ -58,3 +71,19 @@ session (2026-10-05), so the next session can skip the dead ends.
 - Run structure: shared stroke budget, restore on completing a hole, 1-of-3 upgrade choice
   between holes. The current shot resolves before failure is checked. Interrupted shots are
   resolved deterministically on resume.
+
+## Session 2 (2026-10-05/06): state at the end
+- **Game.** The game is complete and playable: 5 holes, 6 upgrades and 2 combos, the run
+  loop, UI, audio and save/resume. Status and launch steps are in `README.md`, tuning and
+  playtest data in `Docs/Tuning.md`.
+- **Captures.** `Tools/unity/capture.sh <scenario> W H [outdir]` drives a Linux player
+  build:
+  - Scenarios: `flow`, `lookall`, `holes`, `fx`, `look`, `hole1`.
+  - Use the release build (`BuildLinuxRelease`, set `BADLIE_PLAYER`) for screenshots without
+    the "Development Build" watermark.
+  - Software rendering takes about 45 s per frame at 540×1170 and about 3 min at
+    1080×2340.
+  - Extra player arguments go in `CAPTURE_EXTRA`, for example
+    `-captureHoles 2,5 -safearea 132,96`.
+- **Long jobs.** The bot playtest (about 1 h) can run in a copy of the project, so the main
+  project stays free for builds. `rsync` is not installed; use `cp -a`.

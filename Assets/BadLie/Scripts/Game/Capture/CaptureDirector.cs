@@ -51,6 +51,9 @@ namespace BadLie.Game
                 case "lookall":
                     yield return LookAll(Arg("-captureHoles") ?? "1,2,3,4,5");
                     break;
+                case "fx":
+                    yield return Fx();
+                    break;
                 default:
                     yield return Hole1();
                     break;
@@ -152,6 +155,18 @@ namespace BadLie.Game
             PointerInput.ScriptedFrame = new PointerFrame();
             yield return Frames(10);
             Log("cancelled: strokes still " + run.State.Strokes);
+
+            // Survey the course, then the settings sheet (separate sound and music volume).
+            run.ToolSurvey();
+            yield return Frames(45);
+            yield return Shot("F05b_survey");
+            run.ToolSurvey();
+            yield return Frames(30);
+            run.ToolSettings();
+            yield return Frames(15);
+            yield return Shot("F05c_settings");
+            run.ToolCloseModal();
+            yield return Frames(15);
 
             // Play the hole with the bot until it is holed (same shot path as the aim gesture).
             var s = run.Session;
@@ -256,6 +271,7 @@ namespace BadLie.Game
                 var s = root.LoadHoleForTools(n - 1, -1);
                 s.SetReady();
                 yield return Frames(40);
+                Log("stats " + s.View.Stats());
                 yield return Shot("A" + n + "_tee");
                 Vector2 approach;
                 float h;
@@ -305,6 +321,83 @@ namespace BadLie.Game
             Vector2 ab = (b - a).normalized;
             Vector2 ap = p - a;
             return ab.x * ap.y - ab.y * ap.x;
+        }
+
+        /// <summary>
+        /// Upgrade effects in real shots: a search over shot inputs finds a shot that uses the
+        /// effect, the shot is played normally and the frame is taken at the moment it happens.
+        /// </summary>
+        IEnumerator Fx()
+        {
+            string only = Arg("-captureFx") ?? "skip,bank,magnet";
+            var skip = ShotModifiers.None;
+            skip.SkipStone = true;
+            if (only.Contains("skip"))
+                yield return FxShot("X1_skip_stone", 0, new Vector2(1.0f, 15.0f), skip, SimEventType.Skip, 0.08f,
+                    r => r.Skipped && !r.IsHazard);
+            var bank = ShotModifiers.None;
+            bank.BankShot = true;
+            if (only.Contains("bank"))
+                yield return FxShot("X2_bank_shot", 2, new Vector2(0.4f, 11.0f), bank, SimEventType.BankWall, 0.12f,
+                    r => r.BankUsed && !r.IsHazard);
+            var magnet = ShotModifiers.None;
+            magnet.CupMagnet = true;
+            if (only.Contains("magnet"))
+                yield return FxShot("X3_cup_magnet", 3, new Vector2(-1.6f, 10.2f), magnet, SimEventType.MagnetPull, 0.25f,
+                    r => HasEvent(r, SimEventType.MagnetPull));
+        }
+
+        static bool HasEvent(SimResult r, SimEventType type)
+        {
+            foreach (var e in r.Events) if (e.Type == type) return true;
+            return false;
+        }
+
+        IEnumerator FxShot(string name, int hole, Vector2 lie, ShotModifiers mods, SimEventType moment, float after, System.Func<SimResult, bool> want)
+        {
+            var root = GameRoot.Instance;
+            var s = root.LoadHoleForTools(hole, -1);
+            s.Mods = mods;
+            s.BallEvent += e => FxDirector.BallEvent(e);
+            float h = s.Course.Ground(lie).Height;
+            s.PlaceBall(lie, h);
+            root.Rig.SnapTo(s.Ball.ContactPosition, root.Rig.PlayWidth);
+            s.SetReady();
+            yield return Frames(20);
+            var planner = new BadLie.Bot.ShotPlanner(s.Course) { Mods = mods };
+            var sim = new BallSimulator();
+            var r = new SimResult();
+            ShotInput best = default(ShotInput);
+            float bestScore = float.MaxValue;
+            for (int a = 0; a < 360; a += 2)
+            {
+                // Launch speed grows with the square root of power, so sample evenly in speed.
+                for (int p = 1; p <= 24; p++)
+                {
+                    var input = new ShotInput(BadLie.Core.Geo2D.FromAngle(a), (p / 24f) * (p / 24f));
+                    sim.Simulate(s.Course, new BallStart(lie, h), input, mods, SimOptions.Full, r);
+                    if (!want(r)) continue;
+                    float sc = planner.Score(r);
+                    if (sc < bestScore)
+                    {
+                        bestScore = sc;
+                        best = input;
+                    }
+                }
+            }
+            if (bestScore == float.MaxValue)
+            {
+                Log(name + ": no shot uses the effect from this lie");
+                yield break;
+            }
+            s.Shoot(best);
+            float te = 0f;
+            foreach (var e in s.LastShot.Events) if (e.Type == moment) { te = e.Time; break; }
+            Log(string.Format("{0}: dir {1} power {2:F2}, {3} at {4:F2}s, outcome {5}", name, best.Direction, best.Power, moment, te, s.LastShot.Outcome));
+            yield return Frames(Mathf.Max(1, Mathf.RoundToInt((te + after) * 30f)));
+            yield return Shot(name);
+            yield return WaitForShot(s, 25f);
+            yield return Frames(20);
         }
 
         /// <summary>Quick look-dev pass: tee view, approach view, whole-hole view.</summary>

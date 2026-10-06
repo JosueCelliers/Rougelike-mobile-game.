@@ -94,13 +94,19 @@ built from **heavy, deliberately faceted solids with machinery sunk into the gro
 7. **Luminous accents are rare and meaningful.** Pale-cyan lantern lilies and amber
    glow-flowers appear only near hazards, cup approaches and upgrade-relevant spots. Shot
    magic (skip ripples, bank flashes, magnet rings) uses the same cyan/gold pair. Bloom stays
-   restrained, and nothing is washed in purple.
+   restrained, and nothing is washed in purple: shadows are a cool blue-violet at 62%, not
+   magenta, and the depths are teal.
 8. **Gameplay readability beats decoration.** The ball is the brightest, highest-contrast
    object. The flag is a small vermilion pennant. Surfaces differ in hue, value and texture,
    not only colour (see §4). Foreground occluders fade when they overlap the ball or the
    aim line.
-9. **Atmosphere for depth.** Height fog pools in the lower estate in a dusty mauve-grey and
-   softens distant arches and towers, giving COCOON-like negative space around the course.
+9. **Atmosphere for depth.** Two fogs, two jobs. Height fog sinks the flooded lower estate
+   into a cool deep teal (`#173036`), so the course reads as lit slabs above shadowed depths.
+   Distance haze fades far ruins and towers into a warm grey (`#8C8075`, which is also the
+   camera background), giving COCOON-like negative space without a purple cast.
+10. **Off-course ground steps back.** Out-of-bounds pads are flagged in the terrain mesh and
+   drawn darker, cooler, less saturated and overgrown (meadow grass, moss in the paving
+   joints), so playable ground is always the brightest, cleanest surface in the frame.
 
 ## 3. Garden biome palette
 
@@ -108,18 +114,18 @@ built from **heavy, deliberately faceted solids with machinery sunk into the gro
 |---|---|---|
 | Fairway stripe A / B | `#5E9A47` / `#4F8A3D` | mown emerald, alternating bands |
 | Green (putting) | `#79B656` / `#6CA94C` | finer, brighter stripes |
-| Rough | `#56622B` | olive, tufted, darker value |
+| Rough | `#5B7038` / `#465A2C` | deeper, cooler green; clumped, clustered tufts |
+| Off-course meadow | rough × (0.70, 0.80, 0.90) | darker and cooler; desaturated 22% |
 | Sand | `#E2C79B` | raked lines, pale and warm |
-| Sandstone / flags | `#D7B88A` | per-stone variation ±8% |
-| Setts accents | `#D39A86` `#D3A75B` `#9EA983` | salmon, ochre, sage (Death's Door) |
+| Paving setts | `#CFB68F` with `#C9A28F` `#C8AA76` `#A9A98E` `#B5AB9F` | calm sandstone, muted salmon/ochre/sage/grey accents, dark joints `#8C7C66` |
 | Terracotta curb | `#B4624A` | brick edging |
 | Retaining / balustrade | `#9C3F48` | crimson stone, ochre lichen |
 | Hedge lit / shadow | `#727C35` / `#46502A` | olive masses |
 | Canopy amber / red | `#E3A33B` / `#C6512F` | tee trees, frame |
-| Water deep / shallow | `#1E3A3C` / `#355B57` | dark, quiet, faint ripples |
-| Shadow tint | `#4C3552` | violet-brown, multiplies into shade |
+| Water deep / shallow | `#0D2A2D` / `#24504D` | dark teal, quiet, faint ripples |
+| Shadow tint | `#7870A3` × 0.62 | cool blue-violet, multiplies into shade |
 | Ambient (occluded) | `#2E4A52` | teal |
-| Fog / lower estate | `#9A8A8F` | dusty mauve haze |
+| Depth fog / distance haze | `#173036` / `#8C8075` | cool depths below, warm haze far away |
 | Luminous accent | `#9BF3EA` / `#FFC56B` | cyan lilies / amber glow-flowers |
 | Ball / flag | `#F8F6F1` / `#E0442F` | highest contrast on screen |
 
@@ -159,3 +165,74 @@ checked against greyscale screenshots.
   No depth of field. Vignette is subtle.
 - Targets: ≤ 150 batches with the SRP Batcher, ≤ 250k triangles on screen, ≤ 2 transparent
   full-screen layers. Water uses vertex data instead of a depth texture.
+
+## 7. Comparison against the references, and the three largest fixes
+
+After all five holes were playable, every hole was captured at phone resolution in a player
+build, with the real game camera and the bot playing, and compared side by side with the three
+references. These were the three largest weaknesses and what was changed.
+
+### 1. Flat, vector-like ground, with off-course ground that read as playable
+*Against Death's Door:* its ground is layered and textured, and the play space is obvious
+at a glance. Ours had these problems:
+- The rough was a uniform olive plane.
+- Fairway edges were ruled curves, and bunkers were perfect ellipses.
+- The crazy paving was loud and multicoloured.
+- The out-of-bounds courts and the Sluice Walk machine yard used the same paving as the
+  playable ground, so they looked playable.
+
+**Fix:**
+- Out-of-bounds pads are flagged in the terrain mesh (`TEXCOORD2.w`) and drawn darker,
+  cooler, desaturated and overgrown. The machine yard became meadow.
+- Calmer paving palette with dark joints and smaller setts.
+- Fairway edges wobble slightly and sit inside a lighter first cut.
+- Bunkers have organic outlines, shared with the physics, plus a damp rim and a sunlit turf
+  lip.
+- The rough has a blade texture and clustered grass tufts.
+
+### 2. A purple wash over everything below the course
+*Against Death's Door and Hades II:* Death's Door's water is dark and quiet, and Hades
+colours its shadows without washing the frame. Ours:
+- The single height fog was mauve, so the water, ruins and lower estate all turned
+  purple-grey, the flat "purple wash" the brief warns against.
+- Shadows leaned magenta.
+
+**Fix:**
+- The fog is split in two: a cool teal depth fog for the lower estate and a warm grey haze
+  for distance.
+- The water is darker teal.
+- Shadow, AO and ambient tints are bluer.
+
+### 3. Primitive props
+*Against COCOON:* its machinery is sunk into the ground with rims, seams and pale lights.
+Ours:
+- The machine blocks were black boxes that read as bins.
+- The cup was a flat black disc.
+- A far tower filled the top of the Orrery frame as a pink cylinder.
+- The runnels read as grey roads.
+
+**Fix:**
+- Sluice housings: stone plinth, coping frame, verdigris panels, amber slots and a gear.
+- A cup with a white liner and a depth gradient.
+- Towers moved out of the play view and cooled, with amber lantern windows; drowned ruins
+  fill the water instead.
+- Runnels are teal water with flow streaks, a wet inner edge and a dry kerb.
+- A ruined arcade gives the Flooded Cloister its cloister.
+
+Before and after, captured from the same tee with the same camera:
+
+| | |
+|---|---|
+| ![Hole 2](Screenshots/compare/H2_tee_before_after.jpg) | ![Hole 3](Screenshots/compare/H3_tee_before_after.jpg) |
+| ![Hole 4](Screenshots/compare/H4_tee_before_after.jpg) | ![Hole 5](Screenshots/compare/H5_tee_before_after.jpg) |
+
+### Remaining gaps
+- **Trees** are single rounded leaf masses. They are not yet the layered, lobed canopies of
+  the Death's Door frame.
+- **No horizon in play.** The play camera looks down at 52°, so it never sees the horizon.
+  Distant towers and aqueducts appear in the survey and overview views, while the play
+  view relies on drowned ruins and the depth fog.
+- **Opaque water.** It is stylised with no true reflections, a deliberate choice for the
+  mobile budget.
+- **Luminous plants** (lantern lilies, amber flowers) are small at play zoom. The glow
+  accents read mainly on machinery and in shot effects.

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- BAD LIE app icon (original). Render: rsvg-convert -w 1024 -h 1024 Tools/art/app_icon.svg -o Assets/BadLie/UI/AppIcon.png -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0" stop-color="#24504d"/>
+      <stop offset="1" stop-color="#0d2023"/>
+    </radialGradient>
+    <radialGradient id="green" cx="45%" cy="40%" r="70%">
+      <stop offset="0" stop-color="#8cc766"/>
+      <stop offset="1" stop-color="#4f8a3d"/>
+    </radialGradient>
+    <radialGradient id="ball" cx="38%" cy="34%" r="70%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d9d3c6"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- gold medallion ring -->
+  <circle cx="512" cy="540" r="372" fill="none" stroke="#9c7440" stroke-width="34"/>
+  <circle cx="512" cy="540" r="372" fill="none" stroke="#dcb573" stroke-width="16"/>
+  <!-- the green: a raised slab with a sandstone lip -->
+  <ellipse cx="512" cy="640" rx="300" ry="132" fill="#b8956a"/>
+  <ellipse cx="512" cy="616" rx="300" ry="132" fill="url(#green)"/>
+  <ellipse cx="512" cy="616" rx="232" ry="96" fill="none" stroke="#7cb75c" stroke-width="10" opacity="0.6"/>
+  <!-- cup -->
+  <ellipse cx="560" cy="628" rx="46" ry="20" fill="#1c1513"/>
+  <ellipse cx="560" cy="624" rx="46" ry="20" fill="none" stroke="#f1ece2" stroke-width="6"/>
+  <!-- flag -->
+  <rect x="554" y="250" width="12" height="380" rx="6" fill="#efe9dc"/>
+  <path d="M566 256 L760 312 L566 372 Z" fill="#e0442f"/>
+  <path d="M566 256 L760 312 L566 300 Z" fill="#f26a4f" opacity="0.6"/>
+  <!-- ball with its shadow, just short of the cup: a bad lie -->
+  <ellipse cx="402" cy="664" rx="54" ry="16" fill="#1d171c" opacity="0.35"/>
+  <circle cx="392" cy="616" r="50" fill="url(#ball)" stroke="#1d171c" stroke-width="7"/>
+  <!-- luminous accent -->
+  <circle cx="300" cy="560" r="10" fill="#9bf3ea" opacity="0.9"/>
+  <circle cx="730" cy="580" r="8" fill="#ffc56b" opacity="0.9"/>
+</svg>

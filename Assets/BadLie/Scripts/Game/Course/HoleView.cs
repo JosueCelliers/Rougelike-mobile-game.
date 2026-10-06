@@ -76,6 +76,22 @@ namespace BadLie.Game
             BuildFlag();
             StaticBatchingUtility.Combine(ground.gameObject);
             StaticBatchingUtility.Combine(obstacles.gameObject);
+            StaticBatchingUtility.Combine(decor.gameObject);
+        }
+
+        /// <summary>Scene cost of this hole, for the performance notes (desktop measurement).</summary>
+        public string Stats()
+        {
+            var renderers = GetComponentsInChildren<MeshRenderer>();
+            var mats = new HashSet<Material>();
+            int shadowCasters = 0;
+            foreach (var r in renderers)
+            {
+                mats.Add(r.sharedMaterial);
+                if (r.shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.Off) shadowCasters++;
+            }
+            return string.Format("{0}: {1:N0} triangles, {2} renderers ({3} cast shadows), {4} materials, static batched",
+                Course.Def.Name, Triangles, renderers.Length, shadowCasters, mats.Count);
         }
 
         // ------------------------------------------------------------------ helpers

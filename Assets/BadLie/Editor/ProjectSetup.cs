@@ -36,6 +36,7 @@ namespace BadLie.EditorTools
             EditorUtility.SetDirty(cfg);
             AssetDatabase.SaveAssets();
             BuildScene(cfg);
+            KitTools.CreatePrefabs();
             AssetDatabase.SaveAssets();
             Debug.Log("[BadLie] Project setup complete");
         }
@@ -63,6 +64,11 @@ namespace BadLie.EditorTools
             PlayerSettings.Android.renderOutsideSafeArea = true;
             PlayerSettings.iOS.targetOSVersionString = "15.0";
             PlayerSettings.statusBarHidden = true;
+            // App icon (Tools/art/app_icon.svg), used for every platform's default icon set.
+            const string iconPath = Root + "/UI/AppIcon.png";
+            AssetDatabase.ImportAsset(iconPath);
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>(iconPath);
+            if (icon != null) PlayerSettings.SetIcons(UnityEditor.Build.NamedBuildTarget.Unknown, new[] { icon }, UnityEditor.IconKind.Any);
             PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
             PlayerSettings.defaultScreenWidth = 540;
             PlayerSettings.defaultScreenHeight = 1170;

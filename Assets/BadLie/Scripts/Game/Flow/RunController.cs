@@ -339,6 +339,12 @@ namespace BadLie.Game
             Continue(SaveSystem.LoadRun());
         }
 
+        public void ToolSurvey() { ToggleSurvey(); }
+
+        public void ToolSettings() { OpenSettings(); }
+
+        public void ToolCloseModal() { ui.CloseModal(); }
+
         void Update()
         {
             if (Session == null) return;

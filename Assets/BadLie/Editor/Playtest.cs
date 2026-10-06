@@ -201,12 +201,17 @@ namespace BadLie.EditorTools
         // ------------------------------------------------------------------ holes
         static void Holes(StringBuilder report)
         {
+            // -playtestNoisy none: noisy bots only play without upgrades (much faster).
+            bool noisyAll = Arg("-playtestNoisy", "all") == "all";
             var jobs = new List<HoleJob>();
             foreach (var pin in pins)
                 for (int l = 0; l < Loadouts.Length; l++)
                     for (int s = 0; s < Skills.Length; s++)
+                    {
+                        if (s > 0 && l > 0 && !noisyAll) continue;
                         for (int seed = 0; seed < Skills[s].Seeds; seed++)
                             jobs.Add(new HoleJob { Pin = pin, Loadout = l, Skill = s, Seed = seed });
+                    }
             var sw = Stopwatch.StartNew();
             Parallel.ForEach(jobs, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, job =>
             {
@@ -270,6 +275,11 @@ namespace BadLie.EditorTools
                     int plays = 0;
                     for (int l = 0; l < Loadouts.Length; l++)
                     {
+                        if (l > 0 && !noisyAll)
+                        {
+                            row.Append(" – |");
+                            continue;
+                        }
                         float sum = 0f;
                         int n = 0, fails = 0;
                         foreach (var job in jobs)

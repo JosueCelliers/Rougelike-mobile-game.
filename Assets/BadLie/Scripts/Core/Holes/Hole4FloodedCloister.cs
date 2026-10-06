@@ -31,6 +31,7 @@ namespace BadLie.Holes
             h.AltCups.Add(V(1.2f, 13.6f));
             h.Features.Add("Two short water gaps");
             h.Features.Add("Corner banks");
+            h.Features.Add("Coping walls guard the walkway");
 
             // ---------------------------------------------------------------- ground
             var outer = new BoxShape(V(0f, 11f), V(20f, 22f), 0f, 0.4f);
@@ -40,15 +41,20 @@ namespace BadLie.Holes
             h.Pad("step", new BoxShape(V(0f, 6.9f), V(3.2f, 1.7f), 0f, 0.45f), 6, HeightDef.Flat(0.3f), SurfaceType.Fairway, EdgeStyle.Coping);
             var island = h.Pad("island", new CircleShape(V(0f, 11.95f), 3.0f), 7, HeightDef.Flat(0.42f), SurfaceType.Fairway, EdgeStyle.Coping);
             island.Features.Add(FeatureDef.Bump(V(-1.2f, 13.2f), 1.3f, 0.05f));
-            h.Pad("bridge", new BoxShape(V(0f, 16.3f), V(1.8f, 3.0f), 0f, 0.1f), 6, HeightDef.Ramp(V(0f, 14.95f), 0.42f, V(0f, 17.6f), 0.35f), SurfaceType.Stone, EdgeStyle.Coping);
+            h.Pad("bridge", new BoxShape(V(0f, 16.3f), V(2.4f, 3.0f), 0f, 0.1f), 6, HeightDef.Ramp(V(0f, 14.95f), 0.42f, V(0f, 17.6f), 0.35f), SurfaceType.Stone, EdgeStyle.Coping);
 
             // ---------------------------------------------------------------- surfaces
             h.Paint(SurfaceType.Green, new CircleShape(V(0f, 11.95f), 2.45f), "island");
 
             // ---------------------------------------------------------------- walls
             h.Wall(WallStyle.Sandstone, 1.1f, 0.44f, V(-9.75f, 0.25f), V(9.75f, 0.25f), V(9.75f, 21.75f), V(-9.75f, 21.75f), V(-9.75f, 0.25f));
-            h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(-0.95f, 15.3f), V(-0.95f, 17.5f));
-            h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(0.95f, 15.3f), V(0.95f, 17.5f));
+            h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(-1.25f, 15.3f), V(-1.25f, 17.5f));
+            h.Wall(WallStyle.Curb, 0.15f, 0.16f, V(1.25f, 15.3f), V(1.25f, 17.5f));
+            // A low coping along the court's edge keeps mis-hits on the walkway. It opens only
+            // at the bridge and in front of the stepping stone (the skip route).
+            // (The corners are cut outside the court's rounded corners; the base is the walkway.)
+            h.Wall(WallStyle.Coping, 0.16f, 0.16f, V(-2.2f, 4.32f), V(-5.88f, 4.32f), V(-6.32f, 4.76f), V(-6.32f, 17.24f), V(-5.88f, 17.68f), V(-1.35f, 17.68f)).BaseY = 0.35f;
+            h.Wall(WallStyle.Coping, 0.16f, 0.16f, V(2.2f, 4.32f), V(5.88f, 4.32f), V(6.32f, 4.76f), V(6.32f, 17.24f), V(5.88f, 17.68f), V(1.35f, 17.68f)).BaseY = 0.35f;
             // The arcade: columns along the inner edge of the walkway.
             float[] side = { 6.2f, 9.0f, 11.8f, 14.6f };
             foreach (var z in side)
