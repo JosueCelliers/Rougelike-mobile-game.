@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+#endif
 using BadLie.Run;
 using UnityEngine;
 
@@ -11,6 +14,14 @@ namespace BadLie.Game
         static string Dir { get { return Application.persistentDataPath; } }
         static string RunPath { get { return Path.Combine(Dir, "run.json"); } }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")] static extern void BadLie_SyncFS();
+        /// <summary>In the browser, flush the file system to IndexedDB so the run survives a reload.</summary>
+        static void Flush() { BadLie_SyncFS(); }
+#else
+        static void Flush() { }
+#endif
+
         public static void SaveRun(RunState s)
         {
             try
@@ -19,6 +30,7 @@ namespace BadLie.Game
                 File.WriteAllText(tmp, JsonUtility.ToJson(s));
                 if (File.Exists(RunPath)) File.Delete(RunPath);
                 File.Move(tmp, RunPath);
+                Flush();
             }
             catch (Exception e)
             {
@@ -53,6 +65,7 @@ namespace BadLie.Game
             try
             {
                 if (File.Exists(RunPath)) File.Delete(RunPath);
+                Flush();
             }
             catch (Exception) { }
         }

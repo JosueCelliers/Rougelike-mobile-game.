@@ -34,6 +34,22 @@ behaves. A run takes about 5–10 minutes.
 The mouse works like a finger. Drag back from anywhere to aim and release to shoot.
 Right-click or Esc cancels a shot, and the scroll wheel zooms in survey mode.
 
+### Play in a browser (no install)
+A web build is published as a claude.ai Artifact: **https://claude.ai/artifact/R9WWftsb7L8Xbjjot2jx5L**
+- It is private to its owner. Use the page's **Share** menu to let others open it.
+- It runs in current Chrome, Safari, Edge and Firefox, on phones and computers.
+- It was checked in headless Chromium: it boots, the menus respond to taps, aiming works
+  and a shot plays. It has not been tried in a phone's browser yet.
+- Audio is AAC, which mainstream browsers play.
+
+To rebuild and republish:
+1. `Tools/unity/unity.sh build_webgl -quit -buildTarget WebGL -executeMethod BadLie.EditorTools.BuildTools.BuildWebGL`
+2. `Tools/web/package_artifact.sh`
+3. Publish `Builds/WebArtifact/index.html` with its `Build/` files.
+
+The page (`Tools/web/index.html`) decodes the packed engine files in the browser. It shows a
+plain message if a browser lacks WebAssembly or WebGL 2.
+
 ### Install on an Android phone
 A test APK was built headless in this environment: `Builds/Android/BADLIE.apk`, 26.3 MB.
 - It is IL2CPP with size-optimised code generation, ARM64, targets Android 16 (API 36) with

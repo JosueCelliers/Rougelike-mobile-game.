@@ -25,6 +25,24 @@ namespace BadLie.EditorTools
             Build(BuildTarget.StandaloneLinux64, "Builds/LinuxRelease/BADLIE.x86_64", BuildOptions.None);
         }
 
+        /// <summary>
+        /// Web build for the browser. Files are left uncompressed and named plainly; the hosting
+        /// step gzips the large ones itself and the page inflates them, so no server headers
+        /// are needed. Output: Builds/WebGL.
+        /// </summary>
+        [MenuItem("BAD LIE/Build/WebGL")]
+        public static void BuildWebGL()
+        {
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+            PlayerSettings.WebGL.decompressionFallback = false;
+            PlayerSettings.WebGL.nameFilesAsHashes = false;
+            PlayerSettings.WebGL.dataCaching = false;
+            PlayerSettings.WebGL.template = "APPLICATION:Minimal";
+            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
+            PlayerSettings.SetIl2CppCodeGeneration(UnityEditor.Build.NamedBuildTarget.WebGL, UnityEditor.Build.Il2CppCodeGeneration.OptimizeSize);
+            Build(BuildTarget.WebGL, "Builds/WebGL", BuildOptions.None);
+        }
+
         [MenuItem("BAD LIE/Build/Android APK")]
         public static void BuildAndroid()
         {

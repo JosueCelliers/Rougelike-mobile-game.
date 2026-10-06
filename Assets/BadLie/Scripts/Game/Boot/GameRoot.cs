@@ -20,8 +20,13 @@ namespace BadLie.Game
         void Awake()
         {
             Instance = this;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            // In a browser, frames follow requestAnimationFrame; a fixed target would fight it.
+            Application.targetFrameRate = -1;
+#else
             Application.targetFrameRate = 60;
             QualitySettings.vSyncCount = 0;
+#endif
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             PointerInput.Enable();
             Rig = Cam.GetComponent<CameraRig>();

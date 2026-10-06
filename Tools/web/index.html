@@ -1,0 +1,306 @@
+<title>BAD LIE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500&family=Cinzel:wght@500;700&display=swap">
+<style>
+  /* Layout: one portrait stage, centred; the game canvas is the page and everything else
+     (loading, errors, the one-line control hint) stays out of its way. */
+  :root {
+    --ground: #0b1d20;      /* the flooded estate at dusk */
+    --panel: #12292c;
+    --ivory: #f3e6cf;       /* ball, type */
+    --muted: #a7b3aa;
+    --gold: #dcb573;        /* medallion line work */
+    --gold-deep: #9c7440;
+    --alarm: #e0442f;       /* the pennant */
+    --display: "Cinzel", "Trajan Pro", Georgia, serif;
+    --body: "Barlow Semi Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ivory);
+    font-family: var(--body);
+    font-size: 15px;
+    overflow: hidden;
+  }
+  .stage {
+    height: 100%;
+    box-sizing: border-box;
+    padding-inline: 16px;
+    padding-block: 12px;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+    container-type: size;
+  }
+  .frame {
+    position: relative;
+    /* Fill the height on desktop, the width on a phone; always phone-shaped (1080 x 2340). */
+    width: min(100%, calc((100cqh - 90px) * 1080 / 2340));
+    max-width: 100%;
+    aspect-ratio: 1080 / 2340;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent), 0 18px 60px rgb(0 0 0 / 0.45);
+    background: var(--panel);
+  }
+  #unity-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .boot {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 14px;
+    padding-inline: 28px;
+    text-align: center;
+    background:
+      radial-gradient(120% 70% at 50% 36%, color-mix(in srgb, #24504d 70%, transparent), transparent 70%),
+      var(--panel);
+    transition: opacity 600ms ease;
+  }
+  .boot.done { opacity: 0; pointer-events: none; }
+  .medal {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow: inset 0 0 0 6px var(--gold-deep);
+    display: grid;
+    place-items: center;
+  }
+  .medal svg { width: 64px; height: 64px; }
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 9cqw, 3.2rem);
+    letter-spacing: 0.32em;
+    padding-left: 0.32em; /* keep tracked capitals optically centred */
+    text-wrap: balance;
+  }
+  .tag {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .bar {
+    width: min(240px, 80%);
+    height: 6px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--ivory) 14%, transparent);
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .bar span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    transition: width 200ms linear;
+  }
+  .status {
+    margin: 0;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    min-height: 1.3em;
+  }
+  .error {
+    margin: 6px 0 0;
+    max-width: 30ch;
+    color: var(--ivory);
+    line-height: 1.45;
+  }
+  .error strong { color: var(--alarm); font-weight: 500; }
+  .hint {
+    margin: 0;
+    max-width: 52ch;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .boot, .bar span { transition: none; }
+  }
+</style>
+
+<main class="stage">
+  <div class="frame">
+    <canvas id="unity-canvas" tabindex="-1" aria-label="BAD LIE game"></canvas>
+    <div class="boot" id="boot" role="status" aria-live="polite">
+      <div class="medal" aria-hidden="true">
+        <svg viewBox="0 0 64 64">
+          <ellipse cx="32" cy="44" rx="24" ry="9" fill="#5f9a4e"/>
+          <rect x="35" y="12" width="2.4" height="31" rx="1.2" fill="#efe9dc"/>
+          <path d="M37.4 13 L52 17.5 L37.4 22 Z" fill="#e0442f"/>
+          <ellipse cx="36.2" cy="44" rx="4" ry="1.6" fill="#1c1513"/>
+          <circle cx="22" cy="40.5" r="4.2" fill="#f8f6f1" stroke="#1d171c" stroke-width="1"/>
+        </svg>
+      </div>
+      <h1>BAD LIE</h1>
+      <p class="tag">A golf roguelike of the flooded estate</p>
+      <div class="bar" aria-hidden="true"><span id="bar-fill"></span></div>
+      <p class="status" id="status">Opening the gates…</p>
+      <p class="error" id="error" hidden></p>
+    </div>
+  </div>
+  <p class="hint">Drag back from anywhere to aim, release to shoot. Slide back into the ring to cancel. Five holes, one stroke budget.</p>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script>
+(() => {
+  // Build files published next to this page. The two large ones are gzipped and stored as
+  // base64 text by the packaging script (the host serves only web file types, up to 16 MB
+  // each) and decoded here; sizes are filled in at packaging.
+  const BUILD = "Build/BADLIE";
+  const PACKED = [
+    { url: BUILD + ".wasm.gz.b64.txt", serves: BUILD + ".wasm", type: "application/wasm", size: __WASM_GZ_SIZE__ },
+    { url: BUILD + ".data.gz.b64.txt", serves: BUILD + ".data", type: "application/octet-stream", size: __DATA_GZ_SIZE__ },
+  ];
+
+  const boot = document.getElementById("boot");
+  const fill = document.getElementById("bar-fill");
+  const status = document.getElementById("status");
+  const errorBox = document.getElementById("error");
+  const canvas = document.getElementById("unity-canvas");
+
+  function progress(fraction, label) {
+    fill.style.width = Math.round(Math.max(0, Math.min(1, fraction)) * 100) + "%";
+    if (label) status.textContent = label;
+  }
+
+  function fail(reason, detail) {
+    status.textContent = "";
+    fill.style.width = "0%";
+    errorBox.hidden = false;
+    errorBox.innerHTML = "";
+    const head = document.createElement("strong");
+    head.textContent = "The game could not start here. ";
+    errorBox.append(head, document.createTextNode(reason));
+    if (detail) console.error("BAD LIE:", detail);
+  }
+
+  // The engine needs WebAssembly and WebGL 2. Check both before downloading anything.
+  try {
+    if (typeof WebAssembly !== "object") throw new Error("no WebAssembly");
+    new WebAssembly.Module(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]));
+  } catch (e) {
+    fail("This browser or viewer does not allow WebAssembly, which the game engine needs. Try a current Chrome, Safari, Edge or Firefox.", e);
+    return;
+  }
+  if (!document.createElement("canvas").getContext("webgl2")) {
+    fail("This browser has no WebGL 2 graphics. Try a current Chrome, Safari, Edge or Firefox, with hardware acceleration on.");
+    return;
+  }
+
+  async function download(file, onBytes) {
+    const res = await fetch(file.url);
+    if (!res.ok) throw new Error(file.url + " returned HTTP " + res.status);
+    const chunks = [];
+    let got = 0;
+    if (res.body && res.body.getReader) {
+      const reader = res.body.getReader();
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        got += value.length;
+        onBytes(got);
+      }
+    } else {
+      const all = new Uint8Array(await res.arrayBuffer());
+      chunks.push(all);
+      got = all.length;
+      onBytes(got);
+    }
+    const text = new Uint8Array(got);
+    let at = 0;
+    for (const c of chunks) { text.set(c, at); at += c.length; }
+    chunks.length = 0;
+    // Base64 text -> gzip bytes.
+    const binary = atob(new TextDecoder().decode(text).trim());
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) return bytes;
+    if (typeof DecompressionStream === "function") {
+      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+      return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+    return window.pako.ungzip(bytes);
+  }
+
+  async function start() {
+    const total = PACKED.reduce((sum, f) => sum + f.size, 0);
+    const got = PACKED.map(() => 0);
+    const show = () => {
+      const sum = got.reduce((a, b) => a + b, 0);
+      progress(0.85 * sum / total, "Loading the estate… " + Math.round(100 * sum / total) + "%");
+    };
+    const ready = {};
+    await Promise.all(PACKED.map(async (file, i) => {
+      ready[file.serves] = { bytes: await download(file, n => { got[i] = n; show(); }), type: file.type };
+    }));
+
+    // Hand the inflated files to Unity's loader as if it had fetched them itself.
+    const realFetch = window.fetch.bind(window);
+    window.fetch = (input, init) => {
+      const url = typeof input === "string" ? input : (input && input.url) || "";
+      for (const key in ready) {
+        if (url === key || url.endsWith("/" + key) || url.endsWith(key)) {
+          const f = ready[key];
+          return Promise.resolve(new Response(f.bytes, { status: 200, headers: { "Content-Type": f.type, "Content-Length": String(f.bytes.byteLength) } }));
+        }
+      }
+      return realFetch(input, init);
+    };
+
+    progress(0.86, "Waking the machinery…");
+    await new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = BUILD + ".loader.js";
+      s.onload = resolve;
+      s.onerror = () => reject(new Error("could not load " + s.src));
+      document.body.appendChild(s);
+    });
+
+    const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+    const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+    await window.createUnityInstance(canvas, {
+      dataUrl: BUILD + ".data",
+      frameworkUrl: BUILD + ".framework.js",
+      codeUrl: BUILD + ".wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Bad Lie Studio",
+      productName: "BAD LIE",
+      productVersion: "0.1.0",
+      devicePixelRatio: dpr,
+      matchWebGLToCanvasSize: true,
+      showBanner: (msg, type) => { if (type === "error") console.error("BAD LIE:", msg); },
+    }, p => progress(0.86 + 0.14 * p, "Waking the machinery…"));
+
+    progress(1, "Ready");
+    boot.classList.add("done");
+    canvas.focus();
+  }
+
+  start().catch(e => fail("Something went wrong while loading (" + (e && e.message ? e.message : e) + "). Reloading the page usually helps.", e));
+})();
+</script>

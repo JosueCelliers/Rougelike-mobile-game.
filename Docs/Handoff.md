@@ -87,3 +87,11 @@ session (2026-10-05), so the next session can skip the dead ends.
     `-captureHoles 2,5 -safearea 132,96`.
 - **Long jobs.** The bot playtest (about 1 h) can run in a copy of the project, so the main
   project stays free for builds. `rsync` is not installed; use `cp -a`.
+- **Web build.** The Unity WebGL module installs with one stream into the editor folder
+  (5.5 GB):
+  `curl -sSL https://download.unity3d.com/download_unity/e1dba0a9aba4/LinuxEditorTargetInstaller/UnitySetup-WebGL-Support-for-Editor-6000.3.25f1.tar.xz | tar -xJf - -C /opt/unity/6000.3.25f1`.
+  - A first build takes about 8 minutes.
+  - Artifacts serve only web file types, at most 16 MB each, so
+    `Tools/web/package_artifact.sh` ships the gzipped wasm and data as base64 text.
+  - `node Tools/web/test_local.mjs <dir> <png> play` boots the page in headless Chromium,
+    taps NEW RUN and TEE OFF, and plays a shot. Set `PLAYWRIGHT_MODULE=$(npm root -g)/playwright`.
