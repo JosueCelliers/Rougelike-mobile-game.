@@ -44,7 +44,7 @@ Shader "BadLie/Glow"
                 half core = 0.7h + 0.3h * saturate(dot(normalize(i.normalWS), view));
                 half pulse = 1.0h - _Pulse + _Pulse * sin(_BL_Time.x * 1.6 + i.positionWS.x * 0.7 + i.positionWS.z);
                 half3 c = _Color.rgb * i.color.rgb * core * pulse;
-                c = lerp(c, _BL_FogColor.rgb, BL_FogAmount(i.positionWS) * 0.7h);
+                c = lerp(c, BL_ApplyFog(c, i.positionWS), 0.7h);
                 return half4(c, 1);
             }
             ENDHLSL

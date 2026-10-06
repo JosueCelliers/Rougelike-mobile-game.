@@ -20,8 +20,8 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.1584, g: 0.14760001, b: 0.18, a: 0.36}
-  m_AmbientEquatorColor: {r: 0.115200005, g: 0.1296, b: 0.14940001, a: 0.36}
+  m_AmbientSkyColor: {r: 0.15480001, g: 0.1584, b: 0.18, a: 0.36}
+  m_AmbientEquatorColor: {r: 0.113400005, g: 0.135, b: 0.14940001, a: 0.36}
   m_AmbientGroundColor: {r: 0.072000004, g: 0.111600004, b: 0.11880001, a: 0.36}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1536772329
+--- !u!1 &186456205
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,132 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1536772332}
-  - component: {fileID: 1536772331}
-  - component: {fileID: 1536772330}
-  m_Layer: 0
-  m_Name: Game
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1536772330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536772329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81d72bca525aea948f58ed786e492fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BadLie.Game::BadLie.Game.GameRoot
-  Config: {fileID: 11400000, guid: f121391e35b59450fb0aaec513e32506, type: 2}
-  Cam: {fileID: 2132316159}
-  Atmos: {fileID: 1536772331}
---- !u!114 &1536772331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536772329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abe942ca41a096afdbe8be5e3f10375b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BadLie.Game::BadLie.Game.Atmosphere
-  Sun: {fileID: 2019290751}
-  SunColor: {r: 1, g: 0.84, b: 0.62, a: 1}
-  SunIntensity: 1.75
-  SunAngles: {x: 36, y: 146}
-  ShadowColor: {r: 0.54, g: 0.43, b: 0.67, a: 1}
-  ShadowIntensity: 0.62
-  AmbientSky: {r: 0.44, g: 0.41, b: 0.5, a: 1}
-  AmbientGround: {r: 0.2, g: 0.31, b: 0.33, a: 1}
-  AmbientIntensity: 0.36
-  AOColor: {r: 0.46, g: 0.36, b: 0.5, a: 1}
-  FogColor: {r: 0.5, g: 0.43, b: 0.46, a: 1}
-  FogHeight: {x: -0.9, y: -3.8, z: 0.5}
-  FogDistance: {x: 12, y: 100, z: 0.55}
-  WindDir: {x: 0.8, y: 0.35}
-  WindStrength: 0.06
---- !u!4 &1536772332
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536772329}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1839061674
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1839061676}
-  - component: {fileID: 1839061675}
-  m_Layer: 0
-  m_Name: Post Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1839061675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839061674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 6f19d781bfef8cc08ae10bb1009b7538, type: 2}
---- !u!4 &1839061676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839061674}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2019290750
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2019290752}
-  - component: {fileID: 2019290751}
+  - component: {fileID: 186456207}
+  - component: {fileID: 186456206}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -260,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!108 &2019290751
+--- !u!108 &186456206
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019290750}
+  m_GameObject: {fileID: 186456205}
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
@@ -325,13 +201,13 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!4 &2019290752
+--- !u!4 &186456207
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019290750}
+  m_GameObject: {fileID: 186456205}
   serializedVersion: 2
   m_LocalRotation: {x: 0.09034785, y: 0.9094999, z: -0.29551443, w: 0.2780621}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -340,7 +216,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2132316158
+--- !u!1 &786213778
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -348,11 +224,60 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2132316163}
-  - component: {fileID: 2132316159}
-  - component: {fileID: 2132316162}
-  - component: {fileID: 2132316161}
-  - component: {fileID: 2132316160}
+  - component: {fileID: 786213780}
+  - component: {fileID: 786213779}
+  m_Layer: 0
+  m_Name: Post Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &786213779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786213778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 6f19d781bfef8cc08ae10bb1009b7538, type: 2}
+--- !u!4 &786213780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786213778}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &809134909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809134914}
+  - component: {fileID: 809134910}
+  - component: {fileID: 809134913}
+  - component: {fileID: 809134912}
+  - component: {fileID: 809134911}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -360,17 +285,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!20 &2132316159
+--- !u!20 &809134910
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132316158}
+  m_GameObject: {fileID: 809134909}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.47, g: 0.41, b: 0.43, a: 1}
+  m_BackGroundColor: {r: 0.55, g: 0.5, b: 0.46, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -411,19 +336,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &2132316160
+--- !u!114 &809134911
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132316158}
+  m_GameObject: {fileID: 809134909}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f85777a391887c2fabdfcedc160b3384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BadLie.Game::BadLie.Game.CameraRig
-  Cam: {fileID: 2132316159}
+  Cam: {fileID: 809134910}
   Pitch: 52
   Fov: 30
   PlayWidth: 12.5
@@ -431,21 +356,21 @@ MonoBehaviour:
   MinWidth: 8
   MaxWidth: 26
   BallScreenY: 0.4
---- !u!81 &2132316161
+--- !u!81 &809134912
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132316158}
+  m_GameObject: {fileID: 809134909}
   m_Enabled: 1
---- !u!114 &2132316162
+--- !u!114 &809134913
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132316158}
+  m_GameObject: {fileID: 809134909}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
@@ -483,13 +408,89 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!4 &2132316163
+--- !u!4 &809134914
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132316158}
+  m_GameObject: {fileID: 809134909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1152212681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1152212684}
+  - component: {fileID: 1152212683}
+  - component: {fileID: 1152212682}
+  m_Layer: 0
+  m_Name: Game
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1152212682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152212681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81d72bca525aea948f58ed786e492fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BadLie.Game::BadLie.Game.GameRoot
+  Config: {fileID: 11400000, guid: f121391e35b59450fb0aaec513e32506, type: 2}
+  Cam: {fileID: 809134910}
+  Atmos: {fileID: 1152212683}
+--- !u!114 &1152212683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152212681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abe942ca41a096afdbe8be5e3f10375b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BadLie.Game::BadLie.Game.Atmosphere
+  Sun: {fileID: 186456206}
+  SunColor: {r: 1, g: 0.84, b: 0.62, a: 1}
+  SunIntensity: 1.75
+  SunAngles: {x: 36, y: 146}
+  ShadowColor: {r: 0.47, g: 0.44, b: 0.64, a: 1}
+  ShadowIntensity: 0.62
+  AmbientSky: {r: 0.43, g: 0.44, b: 0.5, a: 1}
+  AmbientGround: {r: 0.2, g: 0.31, b: 0.33, a: 1}
+  AmbientIntensity: 0.36
+  AOColor: {r: 0.4, g: 0.37, b: 0.46, a: 1}
+  FogColor: {r: 0.55, g: 0.5, b: 0.46, a: 1}
+  DepthColor: {r: 0.09, g: 0.19, b: 0.21, a: 1}
+  FogHeight: {x: -0.9, y: -3.8, z: 0.62}
+  FogDistance: {x: 12, y: 100, z: 0.55}
+  WindDir: {x: 0.8, y: 0.35}
+  WindStrength: 0.06
+--- !u!4 &1152212684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152212681}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -502,7 +503,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2019290752}
-  - {fileID: 2132316163}
-  - {fileID: 1839061676}
-  - {fileID: 1536772332}
+  - {fileID: 186456207}
+  - {fileID: 809134914}
+  - {fileID: 786213780}
+  - {fileID: 1152212684}

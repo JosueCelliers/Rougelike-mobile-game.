@@ -12,7 +12,8 @@ float4 _BL_ShadowColor;    // rgb: colour multiplier in shadow (violet-brown)
 float4 _BL_AmbientSky;     // rgb: fill from above
 float4 _BL_AmbientGround;  // rgb: fill from below (teal)
 float4 _BL_AOColor;        // rgb: tint of contact darkening
-float4 _BL_FogColor;       // rgb: haze colour
+float4 _BL_FogColor;       // rgb: distance haze colour
+float4 _BL_DepthColor;     // rgb: colour of the depths (height fog below the courses)
 float4 _BL_FogHeight;      // x: fog top (y), y: fog bottom (y), z: max amount
 float4 _BL_FogDistance;    // x: start, y: end, z: max amount
 float4 _BL_Reveal;         // xy: ball viewport uv, z: radius (viewport height units), w: ball eye depth
@@ -48,17 +49,28 @@ half3 BL_Shade(half3 albedo, float3 n, float3 positionWS, half ao, half wrap, ou
     return c;
 }
 
-half BL_FogAmount(float3 positionWS)
+half BL_DepthFog(float3 positionWS)
 {
-    float h = saturate((_BL_FogHeight.x - positionWS.y) / max(_BL_FogHeight.x - _BL_FogHeight.y, 0.001)) * _BL_FogHeight.z;
-    float d = distance(positionWS, _WorldSpaceCameraPos);
-    float dist = saturate((d - _BL_FogDistance.x) / max(_BL_FogDistance.y - _BL_FogDistance.x, 0.001)) * _BL_FogDistance.z;
-    return (half)(1.0 - (1.0 - h) * (1.0 - dist));
+    return (half)(saturate((_BL_FogHeight.x - positionWS.y) / max(_BL_FogHeight.x - _BL_FogHeight.y, 0.001)) * _BL_FogHeight.z);
 }
 
+half BL_DistanceFog(float3 positionWS)
+{
+    float d = distance(positionWS, _WorldSpaceCameraPos);
+    return (half)(saturate((d - _BL_FogDistance.x) / max(_BL_FogDistance.y - _BL_FogDistance.x, 0.001)) * _BL_FogDistance.z);
+}
+
+// Total fog cover (for effects that fade rather than tint).
+half BL_FogAmount(float3 positionWS)
+{
+    return 1.0h - (1.0h - BL_DepthFog(positionWS)) * (1.0h - BL_DistanceFog(positionWS));
+}
+
+// The lower estate sinks into cool depth; the far distance into warm haze.
 half3 BL_ApplyFog(half3 c, float3 positionWS)
 {
-    return lerp(c, _BL_FogColor.rgb, BL_FogAmount(positionWS));
+    c = lerp(c, _BL_DepthColor.rgb, BL_DepthFog(positionWS));
+    return lerp(c, _BL_FogColor.rgb, BL_DistanceFog(positionWS));
 }
 
 // ---------------------------------------------------------------------------------------

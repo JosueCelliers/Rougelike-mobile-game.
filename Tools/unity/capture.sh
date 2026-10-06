@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Runs the Linux player build in scripted capture mode at phone resolution.
 # Usage: Tools/unity/capture.sh <scenario> [width] [height] [outdir]
+# Env: BADLIE_PLAYER=<player binary> (default Builds/Linux), CAPTURE_EXTRA="<extra player args>"
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SCEN="${1:-hole1}"; W="${2:-1080}"; H="${3:-2340}"
@@ -12,7 +13,7 @@ if ! xdpyinfo -display "$DISPLAY" >/dev/null 2>&1; then
   for i in $(seq 1 50); do xdpyinfo -display "$DISPLAY" >/dev/null 2>&1 && break; sleep 0.1; done
 fi
 export ALSA_CONFIG_PATH_UNUSED=1
-timeout 900 "$ROOT/Builds/Linux/BADLIE.x86_64" -force-glcore -screen-fullscreen 0 -screen-width "$W" -screen-height "$H" \
-  -capture "$SCEN" -captureOut "$OUT" -logFile "$OUT/player.log"
+timeout 1800 "${BADLIE_PLAYER:-$ROOT/Builds/Linux/BADLIE.x86_64}" -force-glcore -screen-fullscreen 0 -screen-width "$W" -screen-height "$H" \
+  -capture "$SCEN" -captureOut "$OUT" -logFile "$OUT/player.log" ${CAPTURE_EXTRA:-}
 echo "[capture.sh] exit=$? out=$OUT"
 ls "$OUT"

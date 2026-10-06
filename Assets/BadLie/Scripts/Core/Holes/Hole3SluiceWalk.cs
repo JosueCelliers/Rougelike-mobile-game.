@@ -75,7 +75,7 @@ namespace BadLie.Holes
             h.Wall(WallStyle.Machine, 0.3f, 0.3f, rim.SamplePoints(28)).BaseY = 0.75f;
 
             // ---------------------------------------------------------------- surroundings
-            OutOfBounds(h, "machine-yard", new PolygonShape(new[] { V(1.8f, -5f), V(15f, -5f), V(15f, 44f), V(3.4f, 44f), V(2.4f, 33f), V(2.4f, 26f), V(1.2f, 17f), V(2.6f, 8f) }, 0.4f), 1.05f, SurfaceType.Stone, EdgeStyle.Stone);
+            OutOfBounds(h, "machine-yard", new PolygonShape(new[] { V(1.8f, -5f), V(15f, -5f), V(15f, 44f), V(3.4f, 44f), V(2.4f, 33f), V(2.4f, 26f), V(1.2f, 17f), V(2.6f, 8f) }, 0.4f), 1.05f, SurfaceType.Rough, EdgeStyle.Stone);
             OutOfBounds(h, "north-bank", new BoxShape(V(1f, 47f), V(16f, 8f), 0f, 0.5f), 1.0f, SurfaceType.Rough, EdgeStyle.Earth);
             OutOfBounds(h, "ruin-isle", new PolygonShape(new[] { V(-16f, 6f), V(-9.5f, 7f), V(-8.6f, 15f), V(-10f, 24f), V(-16f, 25f) }, 1.0f), -1.4f, SurfaceType.Rough, EdgeStyle.Earth);
 

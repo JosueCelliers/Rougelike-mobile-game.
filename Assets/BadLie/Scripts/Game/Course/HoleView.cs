@@ -42,7 +42,7 @@ namespace BadLie.Game
             var casters = new List<AOCaster>();
             foreach (var p in placements)
             {
-                if (p.Info.AOStrength <= 0f) continue;
+                if (p.Info.AOStrength <= 0.2f) continue; // grass and litter cast no contact shade
                 Vector2 c = new Vector2(p.Position.x, p.Position.z);
                 casters.Add(new AOCaster { A = c, B = c, Radius = p.Info.Radius * p.Scale * 0.6f, Strength = p.Info.AOStrength, Falloff = 0.3f + 0.25f * p.Info.Radius * p.Scale });
             }
@@ -105,6 +105,48 @@ namespace BadLie.Game
                 list.Add(new Placement { Info = info, Position = pos, Yaw = d.Yaw, Scale = d.Scale, Variant = KitRegistry.VariantFor(info, d.Seed), Tint = d.Tint });
             }
             foreach (var s in def.Scatter) Scatter(s, list);
+            DressRough(list);
+        }
+
+        /// <summary>
+        /// Clusters of low grass on the playable rough, kept off the mown edges, walls, tee and
+        /// cup. Decoration only: the rough surface itself is what slows the ball.
+        /// </summary>
+        void DressRough(List<Placement> list)
+        {
+            KitInfo tuft, dry;
+            if (!KitRegistry.TryGet("tuft", out tuft) || !KitRegistry.TryGet("tuft_dry", out dry)) return;
+            Rect b = Course.Def.PlayBounds;
+            var rng = new DetRandom(Hash.Fnv1a64(Course.Def.Id) + 977u);
+            const float sp = 1.25f;
+            float r = Course.Tuning.BallRadius;
+            for (float z = b.yMin; z < b.yMax; z += sp)
+            {
+                for (float x = b.xMin; x < b.xMax; x += sp)
+                {
+                    Vector2 p = new Vector2(x + rng.Signed() * sp * 0.45f, z + rng.Signed() * sp * 0.45f);
+                    // Clumps, not an even carpet.
+                    if (Noise.Value2(p.x * 0.42f, p.y * 0.42f, 5) < 0.52f) continue;
+                    var g = Course.Ground(p);
+                    if (g.IsVoid || g.Water || g.OutOfBounds || g.Surface != SurfaceType.Rough) continue;
+                    var pad = Course.Pads[g.Pad];
+                    if (pad.CoverageDistance(SurfaceType.Fairway, p) < 0.7f || pad.CoverageDistance(SurfaceType.Green, p) < 0.9f) continue;
+                    if (pad.CoverageDistance(SurfaceType.Sand, p) < 0.5f || pad.CoverageDistance(SurfaceType.Stone, p) < 0.4f) continue;
+                    if ((p - Course.Tee).sqrMagnitude < 6f || (p - Course.Cup).sqrMagnitude < 9f) continue;
+                    if (-pad.VisibleDistance(p) < 0.35f) continue;
+                    if (Course.Clearance(p, g.Height, r, 0.6f) < 0.35f) continue;
+                    var info = rng.Chance(0.35f) ? dry : tuft;
+                    list.Add(new Placement
+                    {
+                        Info = info,
+                        Position = new Vector3(p.x, g.Height, p.y),
+                        Yaw = rng.Value() * 360f,
+                        Scale = rng.Range(0.5f, 0.8f),
+                        Variant = rng.Range(0, info.Variants),
+                        Tint = Color.white,
+                    });
+                }
+            }
         }
 
         float GroundOrLower(Vector2 p)
@@ -228,7 +270,7 @@ namespace BadLie.Game
             flag.transform.SetParent(transform, false);
             flag.transform.position = new Vector3(cup.x, Course.CupHeight, cup.y);
             var pole = new MeshData();
-            var prof = new List<Vector2> { new Vector2(0.022f, -0.3f), new Vector2(0.02f, 1.55f), new Vector2(0.03f, 1.58f), new Vector2(0.0f, 1.62f) };
+            var prof = new List<Vector2> { new Vector2(0.026f, -0.3f), new Vector2(0.024f, 1.86f), new Vector2(0.036f, 1.9f), new Vector2(0.0f, 1.95f) };
             KitPrims.Lathe(pole, Matrix4x4.identity, prof, 8, Palette.Hex("#e9e2d4"), 0.7f, 1f, false);
             var poleGo = new GameObject("Pole");
             poleGo.transform.SetParent(flag.transform, false);
@@ -244,10 +286,10 @@ namespace BadLie.Game
             for (int i = 0; i <= cols; i++)
             {
                 float u = i / (float)cols;
-                float x = u * 0.5f;
-                float hh = Mathf.Lerp(0.32f, 0.02f, u);
-                top[i] = cloth.Add(new Vector3(x, 1.52f, 0), Vector3.back, red, new Vector4(1f, u * 3.5f, 0.3f, 0));
-                bot[i] = cloth.Add(new Vector3(x, 1.52f - hh, 0), Vector3.back, red, new Vector4(0.9f, u * 3.5f, 0.3f, 0));
+                float x = u * 0.7f;
+                float hh = Mathf.Lerp(0.44f, 0.03f, u);
+                top[i] = cloth.Add(new Vector3(x, 1.84f, 0), Vector3.back, red, new Vector4(1f, u * 3.5f, 0.3f, 0));
+                bot[i] = cloth.Add(new Vector3(x, 1.84f - hh, 0), Vector3.back, red, new Vector4(0.9f, u * 3.5f, 0.3f, 0));
             }
             for (int i = 0; i < cols; i++) cloth.Quad(bot[i], top[i], top[i + 1], bot[i + 1]);
             var clothGo = new GameObject("Pennant");

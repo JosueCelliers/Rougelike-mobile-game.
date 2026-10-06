@@ -138,13 +138,17 @@ namespace BadLie.Bot
         readonly SimResult scratch = new SimResult();
         public ShotModifiers Mods = ShotModifiers.None;
 
-        public ShotPlanner(CourseModel course)
+        public ShotPlanner(CourseModel course) : this(course, new DistanceField(course)) { }
+
+        /// <summary>Shares a distance field (read-only once built) between planners.</summary>
+        public ShotPlanner(CourseModel course, DistanceField field)
         {
             this.course = course;
-            field = new DistanceField(course);
+            this.field = field;
         }
 
         public DistanceField Field { get { return field; } }
+        public CourseModel Course { get { return course; } }
 
         public float Score(SimResult r)
         {
@@ -223,7 +227,12 @@ namespace BadLie.Bot
 
         public static HoleRun Play(CourseModel course, ShotModifiers mods, int maxStrokes, float angleError, float powerError, ulong seed)
         {
-            var planner = new ShotPlanner(course) { Mods = mods };
+            return Play(new ShotPlanner(course), course, mods, maxStrokes, angleError, powerError, seed);
+        }
+
+        public static HoleRun Play(ShotPlanner planner, CourseModel course, ShotModifiers mods, int maxStrokes, float angleError, float powerError, ulong seed)
+        {
+            planner.Mods = mods;
             var sim = new BallSimulator();
             var rng = new DetRandom(seed);
             Vector2 lie = course.Tee;

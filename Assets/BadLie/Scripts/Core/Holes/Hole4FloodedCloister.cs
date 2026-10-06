@@ -76,6 +76,10 @@ namespace BadLie.Holes
     {
         public static void Add(HoleDef h)
         {
+            // What is left of the arcade: bays still standing between intact columns.
+            h.PropAt("arcade_28", new Vector3(-6.75f, 0.35f, 7.8f), 90f, 1f);
+            h.PropAt("arcade_28", new Vector3(-6.75f, 0.35f, 10.6f), 90f, 1f);
+            h.PropAt("arcade_28", new Vector3(6.75f, 0.35f, 13.0f), 90f, 1f);
             h.PropAt("lily_pads", new Vector3(-3.8f, 0.02f, 7.6f), 0f, 0.8f);
             h.PropAt("lily_pads", new Vector3(4.2f, 0.02f, 15.6f), 90f, 0.9f);
             h.PropAt("lily_pads", new Vector3(-4.4f, 0.02f, 15.2f), 30f, 0.7f);

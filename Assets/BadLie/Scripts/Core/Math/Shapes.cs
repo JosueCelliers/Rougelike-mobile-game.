@@ -432,6 +432,35 @@ namespace BadLie.Core
         public override float Distance(Vector2 p) { return s.Distance(p) - delta; }
     }
 
+    /// <summary>
+    /// An organic outline: the edge of a shape pushed in and out by smooth value noise, for
+    /// bunkers and beds that should not look drawn with a compass. Scaled down so the result
+    /// stays a distance bound.
+    /// </summary>
+    public sealed class WobbleShape : Shape2D
+    {
+        readonly Shape2D s;
+        readonly float amp, freq, norm;
+        readonly int seed;
+
+        public WobbleShape(Shape2D shape, float amplitude, float wavelength, int seed)
+        {
+            s = shape;
+            amp = amplitude;
+            freq = 1f / wavelength;
+            this.seed = seed;
+            // Value noise changes by at most ~2.2 per cell; keep the gradient at or below 1.
+            norm = 1f / (1f + 2f * amp * 2.2f * freq);
+            Bounds = Inflate(shape.Bounds, amp);
+        }
+
+        public override float Distance(Vector2 p)
+        {
+            float n = Noise.Value2(p.x * freq, p.y * freq, seed) * 2f - 1f;
+            return (s.Distance(p) + amp * n) * norm;
+        }
+    }
+
     public static class Geo2D
     {
         public static Vector2 XZ(Vector3 v) { return new Vector2(v.x, v.z); }

@@ -320,6 +320,52 @@ namespace BadLie.Geometry
             return k;
         }
 
+        /// <summary>
+        /// One bay of a cloister arcade springing from two column capitals: a ring of
+        /// voussoirs and a weathered beam above. Span is centre to centre along local X; the
+        /// columns themselves are separate posts. Decorative only (it stands above the ball).
+        /// </summary>
+        public static KitMesh Arcade(int seed, float span, float spring = 2.62f, float depth = 0.46f)
+        {
+            var k = new KitMesh();
+            var rng = new DetRandom((ulong)(seed * 4099 + 77));
+            float R = span * 0.5f - 0.26f;
+            const float ring = 0.3f;
+            int stones = 9;
+            for (int i = 0; i < stones; i++)
+            {
+                float a0 = Mathf.PI * i / stones, a1 = Mathf.PI * (i + 1) / stones;
+                float am = (a0 + a1) * 0.5f;
+                Vector3 p = new Vector3(Mathf.Cos(am) * (R + ring * 0.5f), spring + Mathf.Sin(am) * (R + ring * 0.5f), 0);
+                float arcLen = (R + ring * 0.5f) * (a1 - a0);
+                Color col = Palette.Jitter(Color.Lerp(SandstoneDark, Sandstone, rng.Value()), 0.06f, ref rng);
+                var tr = Matrix4x4.TRS(p, Quaternion.Euler(0, 0, am * Mathf.Rad2Deg - 90f), Vector3.one);
+                KitPrims.BevelBox(k.Lit, tr * Matrix4x4.Translate(new Vector3(0, -ring * 0.5f, 0)), new Vector3(arcLen - 0.025f, ring, depth), 0.03f, col, 0.95f, 0.7f);
+            }
+            // Spandrel blocks and the beam: a little broken along its length.
+            float beamY = spring + R + ring + 0.02f;
+            for (int side = -1; side <= 1; side += 2)
+            {
+                KitPrims.BevelBox(k.Lit, Matrix4x4.Translate(new Vector3(side * (span * 0.5f - 0.12f), spring, 0)), new Vector3(0.5f, beamY - spring, depth - 0.04f), 0.03f, Palette.Jitter(Sandstone, 0.05f, ref rng), 0.95f, 0.75f);
+            }
+            int pieces = 3;
+            float pl = span / pieces;
+            for (int i = 0; i < pieces; i++)
+            {
+                if (i == 2 && rng.Chance(0.4f)) continue;
+                float x = -span * 0.5f + pl * (i + 0.5f);
+                KitPrims.BevelBox(k.Lit, Matrix4x4.TRS(new Vector3(x, beamY + rng.Signed() * 0.015f, 0), Quaternion.Euler(0, 0, rng.Signed() * 1.2f), Vector3.one), new Vector3(pl - 0.03f, 0.24f, depth + 0.06f), 0.035f, Palette.Jitter(Coping, 0.05f, ref rng), 1f, 0.8f);
+            }
+            // Ivy hanging off one end.
+            if (rng.Chance(0.7f))
+            {
+                var ivy = KitFoliage.WildMass(seed + 13, 0.45f);
+                float sx = rng.Chance(0.5f) ? -1f : 1f;
+                k.Foliage.Append(ivy.Foliage, Matrix4x4.TRS(new Vector3(sx * span * 0.32f, beamY + 0.1f, 0), Quaternion.identity, new Vector3(1.0f, 0.7f, 0.8f)));
+            }
+            return k;
+        }
+
         public static KitMesh Steps(int seed, int count, float width, float rise, float run)
         {
             var k = new KitMesh();

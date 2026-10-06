@@ -13,6 +13,59 @@ namespace BadLie.Geometry
         public static readonly Color Iron = Palette.Hex("#1f1c1e");
         public static readonly Color Bronze = Palette.Hex("#3a2e26");
         public static readonly Color Rim = Palette.Hex("#4a3d34");
+        public static readonly Color Verdigris = Palette.Hex("#4c7466");
+
+        /// <summary>
+        /// A sluice housing (BlockStyle.Machine): a stone plinth and coping frame round a dark
+        /// iron body, verdigris panels, a flat gear on top and amber slot lights. Size is the
+        /// footprint (x, z) and height; the pivot is the bottom centre.
+        /// </summary>
+        public static KitMesh Housing(Vector3 size, int seed)
+        {
+            var k = new KitMesh();
+            var rng = new DetRandom((ulong)(seed * 977 + 5));
+            float w = size.x, h = size.y, d = size.z;
+            bool alongZ = d >= w;
+            float len = alongZ ? d : w, wid = alongZ ? w : d;
+            // Work in a frame where the long side runs along local Z.
+            Matrix4x4 f = alongZ ? Matrix4x4.identity : Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+            Color stone = Palette.Jitter(KitStone.Sandstone, 0.05f, ref rng);
+            Color coping = Palette.Jitter(KitStone.Coping, 0.04f, ref rng);
+            const float plinth = 0.22f, cap = 0.16f, frame = 0.17f;
+            KitPrims.BevelBox(k.Lit, f, new Vector3(wid, plinth, len), 0.05f, stone, 0.95f, 0.45f);
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(0, plinth, 0)), new Vector3(wid - 0.16f, h - plinth - cap, len - 0.16f), 0.08f, Iron, 0.9f, 0.45f);
+            // Verdigris panels and iron ribs down both long faces.
+            int panels = Mathf.Max(1, Mathf.RoundToInt(len / 0.85f));
+            float pl = (len - 0.3f) / panels;
+            for (int i = 0; i < panels; i++)
+            {
+                float z = -len * 0.5f + 0.15f + pl * (i + 0.5f);
+                for (int side = -1; side <= 1; side += 2)
+                {
+                    float x = side * (wid * 0.5f - 0.08f);
+                    KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(x, plinth + 0.12f, z)), new Vector3(0.035f, h - plinth - cap - 0.24f, pl - 0.14f), 0.012f, Verdigris, 0.75f, 0.55f);
+                    KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(x, plinth, z - pl * 0.5f)), new Vector3(0.06f, h - plinth - cap, 0.07f), 0.015f, Rim, 0.95f, 0.5f);
+                }
+            }
+            // Coping frame on top round a recessed iron grille.
+            float top = h - cap;
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(-(wid - frame) * 0.5f, top, 0)), new Vector3(frame, cap, len), 0.04f, coping, 1f, 0.8f);
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3((wid - frame) * 0.5f, top, 0)), new Vector3(frame, cap, len), 0.04f, coping, 1f, 0.8f);
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(0, top, -(len - frame) * 0.5f)), new Vector3(wid - 2f * frame + 0.02f, cap, frame), 0.04f, coping, 1f, 0.8f);
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(0, top, (len - frame) * 0.5f)), new Vector3(wid - 2f * frame + 0.02f, cap, frame), 0.04f, coping, 1f, 0.8f);
+            float inner = wid - 2f * frame;
+            KitPrims.BevelBox(k.Lit, f * Matrix4x4.Translate(new Vector3(0, top - 0.02f, 0)), new Vector3(inner, cap - 0.04f, len - 2f * frame), 0.01f, Iron, 0.7f, 0.6f);
+            // Amber slots across the grille, and a gear lying flat at one end.
+            int slots = Mathf.Max(2, Mathf.FloorToInt((len - 2f * frame - 0.9f) / 0.32f));
+            for (int i = 0; i < slots; i++)
+            {
+                float z = -len * 0.5f + frame + 0.2f + i * 0.32f;
+                KitPrims.BevelBox(k.GlowAmber, f * Matrix4x4.Translate(new Vector3(0, h - 0.055f, z)), new Vector3(inner * 0.62f, 0.02f, 0.06f), 0.008f, Color.white, 1f, 1f);
+            }
+            float gr = Mathf.Min(inner * 0.5f + 0.12f, 0.5f);
+            Gear(k.Lit, f * Matrix4x4.TRS(new Vector3(0, h + 0.02f, len * 0.5f - frame - gr * 0.85f), Quaternion.Euler(90, 0, 0), Vector3.one * 1f), gr, 10, Bronze);
+            return k;
+        }
 
         public static KitMesh LampPost(int seed, float height = 1.6f)
         {
@@ -140,7 +193,16 @@ namespace BadLie.Geometry
                 float t = i / 6f;
                 prof.Add(new Vector2(radius * (1.06f - 0.12f * t), t * height));
             }
-            KitPrims.Lathe(k.Lit, Matrix4x4.identity, prof, 14, Palette.Jitter(KitStone.Sandstone, 0.06f, ref rng), 0.4f, 1f, true);
+            // Weathered, cooler stone than the garden walls so it sits back in the haze.
+            Color stone = Palette.Jitter(Color.Lerp(KitStone.SandstoneDark, Palette.Hex("#8f8a80"), 0.45f), 0.05f, ref rng);
+            KitPrims.Lathe(k.Lit, Matrix4x4.identity, prof, 14, stone, 0.4f, 1f, true);
+            // A lit lantern room near the top: the estate is not entirely asleep.
+            for (int i = 0; i < 6; i++)
+            {
+                float a = i * 60f + rng.Value() * 10f;
+                var tr = Matrix4x4.TRS(Vector3.up * (height * 0.86f), Quaternion.Euler(0, a, 0), Vector3.one) * Matrix4x4.Translate(new Vector3(radius * 0.93f, 0, 0));
+                KitPrims.BevelBox(k.GlowAmber, tr, new Vector3(0.14f, 0.8f, 0.3f), 0.02f, Color.white, 1f, 1f);
+            }
             // Broken crown of merlons.
             int merlons = 10;
             for (int i = 0; i < merlons; i++)
@@ -148,7 +210,7 @@ namespace BadLie.Geometry
                 if (rng.Chance(0.3f)) continue;
                 float a = i * 360f / merlons;
                 var tr = Matrix4x4.TRS(Vector3.up * height, Quaternion.Euler(0, a, 0), Vector3.one) * Matrix4x4.Translate(new Vector3(radius * 0.88f, 0, 0));
-                KitPrims.BevelBox(k.Lit, tr, new Vector3(0.5f, rng.Range(0.4f, 0.9f), 0.7f), 0.05f, Palette.Jitter(KitStone.Sandstone, 0.06f, ref rng), 1f, 0.9f);
+                KitPrims.BevelBox(k.Lit, tr, new Vector3(0.5f, rng.Range(0.4f, 0.9f), 0.7f), 0.05f, Palette.Jitter(stone, 0.06f, ref rng), 1f, 0.9f);
             }
             // Dark window slots.
             for (int i = 0; i < 4; i++)

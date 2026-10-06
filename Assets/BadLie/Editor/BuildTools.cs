@@ -18,6 +18,13 @@ namespace BadLie.EditorTools
             Build(BuildTarget.StandaloneLinux64, "Builds/Linux/BADLIE.x86_64", BuildOptions.Development);
         }
 
+        /// <summary>Release (non-development) Linux player for final screenshots: no watermark.</summary>
+        [MenuItem("BAD LIE/Build/Linux (release)")]
+        public static void BuildLinuxRelease()
+        {
+            Build(BuildTarget.StandaloneLinux64, "Builds/LinuxRelease/BADLIE.x86_64", BuildOptions.None);
+        }
+
         [MenuItem("BAD LIE/Build/Android APK")]
         public static void BuildAndroid()
         {

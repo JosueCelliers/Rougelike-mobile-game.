@@ -43,6 +43,8 @@ namespace BadLie.Geometry
             Add("column_broken", 0.38f, 0.5f, 3, s => KitStone.Column(s + 5, 2.9f, true));
             Add("urn", 0.35f, 0.5f, 3, s => KitStone.UrnOnPlinth(s));
             Add("arch_ruin", 1.9f, 0.5f, 2, s => KitStone.Arch(s, 2.6f, 2.3f, 0.7f, 0.35f));
+            Add("arcade_28", 0f, 0.0f, 3, s => KitStone.Arcade(s, 2.8f));
+            Add("arcade_24", 0f, 0.0f, 3, s => KitStone.Arcade(s + 3, 2.4f));
             Add("lamp_post", 0.22f, 0.45f, 1, s => KitMachine.LampPost(s));
             Add("sluice_gate", 1.5f, 0.5f, 1, s => KitMachine.SluiceGate(s));
             Add("ground_machine", 1.4f, 0.0f, 1, s => KitMachine.GroundMachine(s));

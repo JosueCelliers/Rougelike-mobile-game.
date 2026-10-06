@@ -15,15 +15,18 @@ namespace BadLie.Game
         public float SunIntensity = 1.75f;
         public Vector2 SunAngles = new Vector2(36f, 146f);
         [Header("Shade")]
-        public Color ShadowColor = new Color(0.54f, 0.43f, 0.67f);
+        public Color ShadowColor = new Color(0.47f, 0.44f, 0.64f);
         public float ShadowIntensity = 0.62f;
-        public Color AmbientSky = new Color(0.44f, 0.41f, 0.50f);
+        public Color AmbientSky = new Color(0.43f, 0.44f, 0.50f);
         public Color AmbientGround = new Color(0.20f, 0.31f, 0.33f);
         public float AmbientIntensity = 0.36f;
-        public Color AOColor = new Color(0.46f, 0.36f, 0.50f);
+        public Color AOColor = new Color(0.40f, 0.37f, 0.46f);
         [Header("Fog")]
-        public Color FogColor = new Color(0.50f, 0.43f, 0.46f);
-        public Vector3 FogHeight = new Vector3(-0.9f, -3.8f, 0.5f);
+        /// <summary>Warm haze the far distance fades into (matches the camera background).</summary>
+        public Color FogColor = new Color(0.55f, 0.50f, 0.46f);
+        /// <summary>Cool colour the flooded lower estate sinks into.</summary>
+        public Color DepthColor = new Color(0.09f, 0.19f, 0.21f);
+        public Vector3 FogHeight = new Vector3(-0.9f, -3.8f, 0.62f);
         /// <summary>Distance haze, relative to the camera-to-focus distance: (start offset, end offset, max).</summary>
         public Vector3 FogDistance = new Vector3(12f, 100f, 0.55f);
         public static float CameraDistance = 50f;
@@ -37,6 +40,7 @@ namespace BadLie.Game
         static readonly int GroundId = Shader.PropertyToID("_BL_AmbientGround");
         static readonly int AOId = Shader.PropertyToID("_BL_AOColor");
         static readonly int FogId = Shader.PropertyToID("_BL_FogColor");
+        static readonly int DepthId = Shader.PropertyToID("_BL_DepthColor");
         static readonly int FogHId = Shader.PropertyToID("_BL_FogHeight");
         static readonly int FogDId = Shader.PropertyToID("_BL_FogDistance");
         static readonly int WindId = Shader.PropertyToID("_BL_Wind");
@@ -72,6 +76,7 @@ namespace BadLie.Game
             Shader.SetGlobalVector(GroundId, Linear(AmbientGround, AmbientIntensity));
             Shader.SetGlobalVector(AOId, Linear(AOColor, 1f));
             Shader.SetGlobalVector(FogId, Linear(FogColor, 1f));
+            Shader.SetGlobalVector(DepthId, Linear(DepthColor, 1f));
             Shader.SetGlobalVector(FogHId, new Vector4(FogHeight.x, FogHeight.y, FogHeight.z, 0));
             Shader.SetGlobalVector(FogDId, new Vector4(CameraDistance + FogDistance.x, CameraDistance + FogDistance.y, FogDistance.z, 0));
             Vector2 w = WindDir.normalized;

@@ -125,9 +125,9 @@ namespace BadLie.Holes
             h.Prop("tree_red", 14.4f, 17.2f, 0f, 1.2f, 2);
             h.Prop("wild_mass", -12.2f, 21.0f, 0f, 1.3f, 1);
             h.Prop("wild_mass", 12.4f, 21.8f, 0f, 1.2f, 2);
-            h.PropAt("tower_far", new Vector3(-2f, -1.9f, 52f), 0f, 1.7f);
-            h.PropAt("tower_far", new Vector3(-24f, -1.9f, 46f), 40f, 1.3f);
-            h.PropAt("tower_far", new Vector3(22f, -1.9f, 48f), 80f, 1.4f);
+            h.PropAt("tower_far", new Vector3(-24f, -1.9f, 86f), 0f, 1.5f);
+            h.PropAt("tower_far", new Vector3(-26f, -1.9f, 50f), 40f, 1.3f);
+            h.PropAt("tower_far", new Vector3(24f, -1.9f, 58f), 80f, 1.4f);
             h.PropAt("ruin_wall", new Vector3(-11.6f, -2.3f, 31.0f), 60f, 1.1f);
             h.PropAt("ruin_wall", new Vector3(11.8f, -2.3f, 35.6f), 120f, 1.05f);
             h.PropAt("column_broken", new Vector3(-10.6f, -2.1f, 40.6f), 0f, 1.2f);

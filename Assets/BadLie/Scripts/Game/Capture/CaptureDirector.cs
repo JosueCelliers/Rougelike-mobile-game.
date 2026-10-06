@@ -45,6 +45,12 @@ namespace BadLie.Game
                 case "flow":
                     yield return Flow();
                     break;
+                case "holes":
+                    yield return Holes(Arg("-captureHoles") ?? "1,2,3,4,5");
+                    break;
+                case "lookall":
+                    yield return LookAll(Arg("-captureHoles") ?? "1,2,3,4,5");
+                    break;
                 default:
                     yield return Hole1();
                     break;
@@ -186,6 +192,119 @@ namespace BadLie.Game
             yield return Frames(80);
             yield return Shot("F11_run_lost");
             Log("end reason: " + run.State.EndReason);
+        }
+
+        /// <summary>
+        /// Per-hole pass with the real game camera: the tee, the whole hole, then the bot plays
+        /// the hole and the frame is taken wherever each shot comes to rest.
+        /// </summary>
+        IEnumerator Holes(string list)
+        {
+            var root = GameRoot.Instance;
+            foreach (var part in list.Split(','))
+            {
+                int n;
+                if (!int.TryParse(part.Trim(), out n)) continue;
+                var s = root.LoadHoleForTools(n - 1, -1);
+                s.SetReady();
+                yield return Frames(45);
+                yield return Shot("H" + n + "_1_tee");
+                var rig = root.Rig;
+                float fit = rig.WidthToFit(s.Course.Def.PlayBounds);
+                Vector2 c = s.Course.Def.PlayBounds.center;
+                rig.ScriptTo(new Vector3(c.x, 0f, c.y), fit, 0.01f);
+                yield return Frames(30);
+                yield return Shot("H" + n + "_2_overview");
+                rig.SnapTo(s.Ball.ContactPosition, rig.PlayWidth);
+                s.SetReady();
+                yield return Frames(20);
+                var planner = new BadLie.Bot.ShotPlanner(s.Course) { Mods = s.Mods };
+                for (int k = 1; k <= 6; k++)
+                {
+                    float score;
+                    var plan = planner.Plan(s.Lie, s.LieHeight, out score);
+                    Log(string.Format("H{0} shot {1}: dir {2} power {3:F2} score {4:F1}", n, k, plan.Direction, plan.Power, score));
+                    s.Shoot(plan);
+                    yield return Frames(12);
+                    if (k == 1) yield return Shot("H" + n + "_3_flight");
+                    yield return WaitForShot(s, 25f);
+                    yield return Frames(40);
+                    if (s.LastShot != null && s.LastShot.Outcome == ShotOutcome.Holed)
+                    {
+                        yield return Shot("H" + n + "_9_holed");
+                        break;
+                    }
+                    // No run controller in tool mode: move the lie here (hazards replay from the old lie).
+                    if (s.LastShot != null && !s.LastShot.IsHazard) s.PlaceBall(s.LastShot.FinalPosition, s.LastShot.FinalHeight);
+                    else s.PlaceBall(s.Lie, s.LieHeight);
+                    s.SetReady();
+                    yield return Frames(10);
+                    yield return Shot("H" + n + "_" + (3 + k) + "_lie");
+                }
+            }
+        }
+
+        /// <summary>Look-dev pass over several holes: the tee, then an approach about nine metres
+        /// (walking distance) short of the cup, both with the real game camera.</summary>
+        IEnumerator LookAll(string list)
+        {
+            var root = GameRoot.Instance;
+            foreach (var part in list.Split(','))
+            {
+                int n;
+                if (!int.TryParse(part.Trim(), out n)) continue;
+                var s = root.LoadHoleForTools(n - 1, -1);
+                s.SetReady();
+                yield return Frames(40);
+                yield return Shot("A" + n + "_tee");
+                Vector2 approach;
+                float h;
+                if (FindApproach(s.Course, 9f, out approach, out h))
+                {
+                    s.PlaceBall(approach, h);
+                    root.Rig.SnapTo(s.Ball.ContactPosition, root.Rig.PlayWidth);
+                    s.SetReady();
+                    yield return Frames(30);
+                    yield return Shot("A" + n + "_approach");
+                }
+            }
+        }
+
+        static bool FindApproach(BadLie.Course.CourseModel course, float walk, out Vector2 best, out float height)
+        {
+            var field = new BadLie.Bot.DistanceField(course);
+            best = course.Tee;
+            height = course.TeeHeight;
+            float bestErr = float.MaxValue;
+            Rect b = course.Def.PlayBounds;
+            for (float z = b.yMin; z <= b.yMax; z += 0.5f)
+            {
+                for (float x = b.xMin; x <= b.xMax; x += 0.5f)
+                {
+                    var p = new Vector2(x, z);
+                    var g = course.Ground(p);
+                    if (g.IsVoid || g.Water || g.OutOfBounds) continue;
+                    if (g.Surface != BadLie.Course.SurfaceType.Fairway && g.Surface != BadLie.Course.SurfaceType.Stone) continue;
+                    float d = field.Distance(p);
+                    if (d == float.MaxValue) continue;
+                    // Prefer points roughly in line between tee and cup.
+                    float err = Mathf.Abs(d - walk) + 0.15f * Mathf.Abs(Geo2DCross(course.Tee, course.Cup, p));
+                    if (err < bestErr)
+                    {
+                        bestErr = err;
+                        best = p;
+                        height = g.Height;
+                    }
+                }
+            }
+            return bestErr < float.MaxValue;
+        }
+
+        static float Geo2DCross(Vector2 a, Vector2 b, Vector2 p)
+        {
+            Vector2 ab = (b - a).normalized;
+            Vector2 ap = p - a;
+            return ab.x * ap.y - ab.y * ap.x;
         }
 
         /// <summary>Quick look-dev pass: tee view, approach view, whole-hole view.</summary>

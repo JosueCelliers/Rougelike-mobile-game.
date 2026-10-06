@@ -4,7 +4,8 @@ Shader "BadLie/Terrain"
     // COLOR      = coverage of (fairway, green, sand, stone); rough is the base layer
     // TEXCOORD0  = (runnel coverage, ao, green-edge distance, pad-edge distance)
     // TEXCOORD1  = (is side face, u along edge, depth below top, edge style)
-    // TEXCOORD2  = (flow dir x, flow dir z, wetness, unused)
+    // TEXCOORD2  = (flow dir x, flow dir z, wetness, out of bounds 0/1)
+    // Fairway (COLOR.r) and sand (COLOR.b) coverage ramp over a metre either side of the edge.
     Properties
     {
         _RoughA ("Rough A", Color) = (0.30, 0.34, 0.12, 1)
@@ -130,14 +131,22 @@ Shader "BadLie/Terrain"
                 half4 nLow = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, xz * 0.045);
                 half4 nMid = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, xz * 0.23);
                 half4 nHi = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, xz * 1.35);
+                half4 nBlade = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, xz * float2(3.1, 2.3));
+                half wild = saturate(i.d2.w);
 
-                // Rough: long grass in soft clumps, darker olive than the fairway.
+                // Rough: long grass in soft clumps with dark gaps between the tufts.
                 half4 nClump = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, xz * 0.09);
                 half clump = smoothstep(0.2h, 0.8h, nClump.b * 0.6h + nLow.g * 0.4h);
                 half3 rough = lerp(_RoughB.rgb, _RoughA.rgb, clump);
                 rough *= 0.9h + 0.18h * nLow.r;
-                rough *= 0.93h + 0.1h * nHi.a;
+                half blades = smoothstep(0.3h, 0.72h, nBlade.g * 0.55h + nHi.a * 0.45h);
+                rough *= lerp(0.84h, 1.06h, blades);
                 rough *= 0.95h + 0.08h * smoothstep(0.35h, 0.65h, nHi.b);
+                // Off the course the grass is a shaggier, darker, cooler meadow.
+                half meadow = smoothstep(0.32h, 0.68h, nMid.b * 0.7h + nClump.r * 0.3h);
+                half3 wildRough = lerp(_RoughB.rgb * half3(0.70h, 0.80h, 0.90h), _RoughA.rgb * half3(0.86h, 0.96h, 1.0h), meadow);
+                wildRough *= lerp(0.72h, 1.04h, blades) * (0.9h + 0.2h * nLow.r);
+                rough = lerp(rough, wildRough, wild);
 
                 // Fairway: wide mowing stripes across the line of play.
                 float2 sd = _BL_Stripe.xy;
@@ -161,10 +170,12 @@ Shader "BadLie/Terrain"
                 half4 st = SAMPLE_TEXTURE2D(_SettsTex, sampler_SettsTex, xz / _SettsScale);
                 half3 stone = lerp(SettColor(st.r), _Stone0.rgb, 0.38h) * (0.88h + 0.22h * st.g);
                 stone *= 0.85h + 0.25h * st.b;
-                stone = lerp(stone, _Grout.rgb * (0.85h + 0.2h * nHi.r), st.a);
+                half3 grout = lerp(_Grout.rgb, _RoughB.rgb * 0.9h, wild * 0.75h);
+                stone = lerp(stone, grout * (0.85h + 0.2h * nHi.r), st.a);
                 stone *= 0.92h + 0.12h * nLow.r;
-                // Lichen and wear.
+                // Lichen and wear; moss creeps over the paving off the course.
                 stone = lerp(stone, stone * half3(1.08, 1.0, 0.72), smoothstep(0.62h, 0.8h, nLow.b) * 0.5h);
+                stone = lerp(stone, stone * half3(0.74h, 0.84h, 0.66h), wild * smoothstep(0.3h, 0.7h, nMid.g));
                 const float e = 0.03;
                 half hx = SAMPLE_TEXTURE2D(_SettsTex, sampler_SettsTex, (xz + float2(e, 0)) / _SettsScale).b;
                 half hz = SAMPLE_TEXTURE2D(_SettsTex, sampler_SettsTex, (xz + float2(0, e)) / _SettsScale).b;
@@ -177,17 +188,30 @@ Shader "BadLie/Terrain"
                 float across = dot(xz, float2(-flow.y, flow.x));
                 half streak = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, float2(across * 0.9, along * 0.25 - t * 0.45)).g;
                 half streak2 = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, float2(across * 1.7 + 0.3, along * 0.5 - t * 0.8)).a;
-                half3 runnel = lerp(stone * 0.55h, _Runnel.rgb, 0.65h);
-                runnel += smoothstep(0.62h, 0.85h, streak * 0.6h + streak2 * 0.5h) * 0.16h;
+                half3 runnel = lerp(stone * 0.5h, _Runnel.rgb, 0.8h);
+                runnel += smoothstep(0.6h, 0.85h, streak * 0.6h + streak2 * 0.5h) * 0.2h;
+                // Deeper water and wet stone along the inside of the channel edge.
+                runnel *= lerp(0.72h, 1.0h, smoothstep(0.5h, 0.95h, i.d0.x));
 
                 // Sand: raked lines, grain, damp and darker toward its rim.
                 float rake = sin(dot(xz, sd2) * 9.0 + nLow.r * 6.0) * 0.5 + 0.5;
                 half3 sand = lerp(_SandDark.rgb, _Sand.rgb, 0.72h + 0.28h * rake);
                 sand *= 0.94h + 0.1h * nHi.a;
 
-                half wF = Sharpen(i.cover.r);
+                // Fairway edge: noise keeps the mown line from looking ruled, and a lighter
+                // first cut sits just outside it.
+                half fCov = i.cover.r + (nMid.r - 0.5h) * 0.05h;
+                half wF = Sharpen(fCov);
+                half firstCut = smoothstep(0.32h, 0.47h, fCov) * (1.0h - wF) * (1.0h - wild);
+                rough = lerp(rough, lerp(rough, fair, 0.42h) * (0.97h + 0.06h * nHi.a), firstCut);
+
+                // Bunker: a damp, shaded band inside the lip and a sunlit turf lip outside it.
+                half sCov = i.cover.b;
+                half wSa = Sharpen(sCov);
+                sand *= lerp(1.0h, 0.8h, 1.0h - smoothstep(0.5h, 0.6h, sCov));
+                half turfLip = smoothstep(0.4h, 0.5h, sCov) * (1.0h - wSa);
+
                 half wG = Sharpen(i.cover.g);
-                half wSa = Sharpen(i.cover.b);
                 half wSt = Sharpen(i.cover.a);
                 half wR = Sharpen(i.d0.x);
 
@@ -197,6 +221,9 @@ Shader "BadLie/Terrain"
                 c = lerp(c, runnel, wR);
                 c = lerp(c, stone, wSt * (1.0h - wR));
                 c = lerp(c, sand, wSa);
+                c *= 1.0h + 0.08h * turfLip;
+                // A pale dry kerb just outside a runnel.
+                c *= 1.0h + 0.12h * smoothstep(0.15h, 0.5h, i.d0.x) * (1.0h - wR);
 
                 // Bevelled setts catch the light.
                 Light light = GetMainLight();
@@ -205,7 +232,11 @@ Shader "BadLie/Terrain"
                 c *= 1.0h - 0.28h * saturate(i.d2.z);
                 // Slight darkening right at a slab's lip.
                 c *= 1.0h - 0.18h * (1.0h - smoothstep(0.0h, 0.18h, i.d0.w));
-                sheen = 0.08h * wG + 0.35h * wR + 0.06h * wSt;
+                // Out-of-bounds ground steps back: darker, cooler, less saturated.
+                half lum = dot(c, half3(0.3h, 0.59h, 0.11h));
+                c = lerp(c, lum * half3(0.9h, 1.0h, 1.05h), 0.22h * wild);
+                c *= 1.0h - 0.16h * wild;
+                sheen = (0.08h * wG + 0.35h * wR + 0.06h * wSt) * (1.0h - wild);
                 return c;
             }
 
@@ -260,6 +291,7 @@ Shader "BadLie/Terrain"
                 }
                 // Water stain toward the foot of the face.
                 c *= lerp(1.0h, 0.75h, saturate(i.d2.z) * smoothstep(0.1h, 0.7h, v));
+                c *= 1.0h - 0.1h * saturate(i.d2.w);
                 return c;
             }
 

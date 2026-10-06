@@ -39,7 +39,7 @@ namespace BadLie.Holes
             var green = h.Pad("green", new PolygonShape(new[] { V(-5.6f, 33.4f), V(5.6f, 33.4f), V(6.6f, 36.2f), V(5.8f, 39.6f), V(-5.8f, 39.6f), V(-6.6f, 36.2f) }, 0.8f), 7, HeightDef.Flat(0.38f), SurfaceType.Fairway, EdgeStyle.Stone);
             green.Features.Add(FeatureDef.Bump(V(-2.6f, 38.0f), 2.6f, 0.07f));
             green.Features.Add(FeatureDef.Bump(V(3.4f, 37.6f), 2.0f, -0.05f));
-            h.Pad("apron", new BoxShape(V(0f, 32.55f), V(11.6f, 1.9f), 0f, 0.2f), 6, HeightDef.Ramp(V(0f, 31.7f), 0f, V(0f, 33.45f), 0.38f), SurfaceType.Fairway, EdgeStyle.Stone);
+            h.Pad("apron", new BoxShape(V(0f, 32.55f), V(11.6f, 1.9f), 0f, 0.2f), 6, HeightDef.Ramp(V(0f, 31.6f), 0f, V(0f, 33.25f), 0.38f), SurfaceType.Fairway, EdgeStyle.Stone);
 
             // ---------------------------------------------------------------- surfaces
             h.Paint(SurfaceType.Fairway, new BoxShape(V(0f, 6.6f), V(8.4f, 6.4f), 0f, 0.8f));

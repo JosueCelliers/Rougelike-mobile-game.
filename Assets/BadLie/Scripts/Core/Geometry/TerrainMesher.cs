@@ -91,10 +91,12 @@ namespace BadLie.Geometry
             float h = pad.HeightAt(p, out g);
             Vector3 n = new Vector3(-g.x, 1f, -g.y).normalized;
             float cell = CourseModel.GridCell;
+            // Fairway and sand coverage span a metre either side of the edge (0.5 = the edge) so
+            // the shader can draw a first cut and a bunker lip; green and stone stay tight.
             Color cover = new Color(
-                Cov(pad.CoverageDistance(SurfaceType.Fairway, p), cell),
+                Cov(pad.CoverageDistance(SurfaceType.Fairway, p), WideCoverage),
                 Cov(pad.CoverageDistance(SurfaceType.Green, p), cell),
-                Cov(pad.CoverageDistance(SurfaceType.Sand, p), cell),
+                Cov(pad.CoverageDistance(SurfaceType.Sand, p), WideCoverage),
                 Cov(pad.CoverageDistance(SurfaceType.Stone, p), cell));
             float runnel = Cov(pad.CoverageDistance(SurfaceType.Runnel, p), cell);
             float greenEdge = Mathf.Clamp(pad.CoverageDistance(SurfaceType.Green, p), -1f, 1f);
@@ -107,8 +109,11 @@ namespace BadLie.Geometry
             return m.Add(new Vector3(p.x, h, p.y), n, cover,
                 new Vector4(runnel, ao, greenEdge, edge),
                 new Vector4(0f, 0f, 0f, 0f),
-                new Vector4(flow.x, flow.y, wet, 0f));
+                new Vector4(flow.x, flow.y, wet, pad.Def.OutOfBounds ? 1f : 0f));
         }
+
+        /// <summary>Half-width (m) of the coverage ramp for surfaces that get edge treatments.</summary>
+        public const float WideCoverage = 1f;
 
         static float Cov(float sd, float cell)
         {
@@ -231,8 +236,11 @@ namespace BadLie.Geometry
             float r = course.Tuning.CupRadius;
             const int N = 40;
             const float depth = 0.38f;
-            Color wall = Palette.Hex("#2a211f");
-            Color rimC = Palette.Hex("#efe9dc");
+            // A white liner a little way down, then a warm earth wall that darkens with depth,
+            // so the cup reads as a hole with an inside rather than a flat black disc.
+            Color wall = Palette.Hex("#4a3b32");
+            Color deep = Palette.Hex("#1c1513");
+            Color rimC = Palette.Hex("#f1ece2");
             var top = new int[N + 1];
             var mid = new int[N + 1];
             var bot = new int[N + 1];
@@ -242,18 +250,18 @@ namespace BadLie.Geometry
                 Vector3 dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
                 Vector3 c = new Vector3(cup.x, h, cup.y);
                 top[i] = m.Add(c + dir * r + Vector3.down * 0.002f, -dir, rimC, new Vector4(1f, 0, 0, 0));
-                mid[i] = m.Add(c + dir * r + Vector3.down * 0.05f, -dir, rimC, new Vector4(0.9f, 0, 0, 0));
-                bot[i] = m.Add(c + dir * r * 0.96f + Vector3.down * depth, -dir, wall, new Vector4(0.15f, 0, 0, 0));
+                mid[i] = m.Add(c + dir * r + Vector3.down * 0.075f, -dir, rimC, new Vector4(0.92f, 0, 0, 0));
+                bot[i] = m.Add(c + dir * r * 0.96f + Vector3.down * depth, -dir, deep, new Vector4(0.25f, 0, 0, 0));
             }
             for (int i = 0; i < N; i++)
             {
                 // Inner surface faces the axis: wind so normals point inward.
                 m.Quad(top[i], mid[i], mid[i + 1], top[i + 1]);
-                int m0 = m.Add(m.Positions[mid[i]], m.Normals[mid[i]], wall, new Vector4(0.6f, 0, 0, 0));
-                int m1 = m.Add(m.Positions[mid[i + 1]], m.Normals[mid[i + 1]], wall, new Vector4(0.6f, 0, 0, 0));
+                int m0 = m.Add(m.Positions[mid[i]], m.Normals[mid[i]], wall, new Vector4(0.75f, 0, 0, 0));
+                int m1 = m.Add(m.Positions[mid[i + 1]], m.Normals[mid[i + 1]], wall, new Vector4(0.75f, 0, 0, 0));
                 m.Quad(m0, bot[i], bot[i + 1], m1);
             }
-            int centre = m.Add(new Vector3(cup.x, h - depth, cup.y), Vector3.up, wall, new Vector4(0.1f, 0, 0, 0));
+            int centre = m.Add(new Vector3(cup.x, h - depth, cup.y), Vector3.up, deep, new Vector4(0.2f, 0, 0, 0));
             for (int i = 0; i < N; i++) m.Tri(centre, bot[i + 1], bot[i]);
             return m;
         }
@@ -286,14 +294,15 @@ namespace BadLie.Geometry
                     Vector2 o = loop.Normals[i];
                     Vector3 o3 = new Vector3(o.x, 0f, o.y);
                     float wet = water ? 1f : 0f;
+                    float wild = pad.Def.OutOfBounds ? 1f : 0f;
                     float lip = Mathf.Min(0.05f, drop * 0.4f);
                     Vector3 p0 = new Vector3(p.x, top, p.y);
                     Vector3 p1 = new Vector3(p.x + o.x * 0.03f, top - lip, p.y + o.y * 0.03f);
                     Vector3 p2 = new Vector3(p.x + o.x * 0.06f, bottom, p.y + o.y * 0.06f);
                     float aoTop = 0.95f, aoBot = Mathf.Lerp(0.95f, 0.45f, Mathf.Clamp01(drop / 0.9f));
-                    col[i, 0] = m.Add(p0, (o3 * 0.55f + Vector3.up * 0.85f).normalized, Color.clear, new Vector4(0, aoTop, 1, 1), new Vector4(1f, u, 0f, style), new Vector4(0, 0, wet, 0));
-                    col[i, 1] = m.Add(p1, (o3 + Vector3.up * 0.15f).normalized, Color.clear, new Vector4(0, aoTop, 1, 1), new Vector4(1f, u, lip, style), new Vector4(0, 0, wet, 0));
-                    col[i, 2] = m.Add(p2, o3, Color.clear, new Vector4(0, aoBot, 1, 1), new Vector4(1f, u, top - bottom, style), new Vector4(0, 0, wet, 0));
+                    col[i, 0] = m.Add(p0, (o3 * 0.55f + Vector3.up * 0.85f).normalized, Color.clear, new Vector4(0, aoTop, 1, 1), new Vector4(1f, u, 0f, style), new Vector4(0, 0, wet, wild));
+                    col[i, 1] = m.Add(p1, (o3 + Vector3.up * 0.15f).normalized, Color.clear, new Vector4(0, aoTop, 1, 1), new Vector4(1f, u, lip, style), new Vector4(0, 0, wet, wild));
+                    col[i, 2] = m.Add(p2, o3, Color.clear, new Vector4(0, aoBot, 1, 1), new Vector4(1f, u, top - bottom, style), new Vector4(0, 0, wet, wild));
                     has[i] = true;
                 }
                 for (int i = 0; i < n; i++)

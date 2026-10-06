@@ -63,8 +63,7 @@ namespace BadLie.Geometry
                         KitFoliage.AddHedgeBlock(k.Foliage, Matrix4x4.identity, new Vector3(size.x, b.Height, size.y), b.Seed, 0.25f);
                         break;
                     case BlockStyle.Machine:
-                        KitPrims.BevelBox(k.Lit, Matrix4x4.identity, new Vector3(size.x, b.Height, size.y), 0.14f, KitMachine.Iron, 0.9f, 0.4f);
-                        KitPrims.BevelBox(k.Glow, Matrix4x4.Translate(new Vector3(0, b.Height * 0.7f, -size.y * 0.5f - 0.005f)), new Vector3(size.x * 0.5f, 0.04f, 0.02f), 0.01f, Color.white, 1, 1);
+                        k.Append(KitMachine.Housing(new Vector3(size.x, b.Height, size.y), b.Seed + i), Matrix4x4.identity);
                         break;
                     default:
                         KitPrims.BevelBox(k.Lit, Matrix4x4.identity, new Vector3(size.x, b.Height, size.y), 0.05f, KitStone.Sandstone, 0.95f, 0.45f);
